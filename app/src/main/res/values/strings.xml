@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">My Tracking App</string>
+    <string name="myLocation_string">My Location</string>
+    <string name="latitude_string">Latitude %1$s</string>
+    <string name="longitude_string">Longitude %1$s</string>
+    <string name="speed_string">Speed: %1$s</string>
+    <string name="start_button">Start New Tracking</string>
+</resources>
