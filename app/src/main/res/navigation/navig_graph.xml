@@ -3,11 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navig_graph"
-    app:startDestination="@id/mainActivity">
+    app:startDestination="@id/trackFragment">
 
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="com.example.mytrackingapp.MainActivity"
-        android:label="activity_main"
-        tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/trackingFragment"
+        android:name="com.example.mytrackingapp.ui.fragments.TrackingFragment"
+        android:label="TrackingFragment" >
+        <action
+            android:id="@+id/action_trackingFragment_to_trackFragment"
+            app:destination="@id/trackFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="com.example.mytrackingapp.ui.fragments.StatisticsFragment"
+        android:label="StatisticsFragment" />
+    <fragment
+        android:id="@+id/trackFragment"
+        android:name="com.example.mytrackingapp.ui.fragments.TrackFragment"
+        android:label="TrackFragment" >
+        <action
+            android:id="@+id/action_trackFragment_to_trackingFragment"
+            app:destination="@id/trackingFragment" />
+    </fragment>
 </navigation>
