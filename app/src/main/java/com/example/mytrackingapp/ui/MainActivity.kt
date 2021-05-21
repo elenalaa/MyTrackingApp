@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     val CITY: String = "helsinki,fi"
     val API: String = "ea24a5db5d70a7fa2d93a248d0fd9029"
-    val lon
+
 
 
     private lateinit var toolbar: ActionBar
