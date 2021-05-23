@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/statisticsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding='16dp'>
@@ -11,19 +12,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginBottom="76dp"
+        android:layout_marginBottom="48dp"
         android:text="Total Distance"
         app:layout_constraintBottom_toTopOf="@+id/tvAverageSpeedInfo"
         app:layout_constraintEnd_toStartOf="@+id/tvTotalDistance"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvAverageSpeedInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="220dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="192dp"
         android:text="Average Speed"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent" />
@@ -32,34 +33,34 @@
         android:id="@+id/tvTotalTimeInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="40dp"
         android:text="Total Time"
         app:layout_constraintBottom_toTopOf="@+id/tvTotalDistanceInfo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline4"
-        app:layout_constraintVertical_bias="0.475" />
+        app:layout_constraintVertical_bias="0.536" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvAverageSpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="204dp"
+        android:layout_marginBottom="176dp"
         android:text="0km/h"
         android:textSize="40sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.186"
+        app:layout_constraintHorizontal_bias="0.082"
         app:layout_constraintStart_toEndOf="@+id/tvAverageSpeedInfo" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvTotalTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="68dp"
         android:text="@string/time_sek"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.42"
+        app:layout_constraintHorizontal_bias="0.291"
         app:layout_constraintStart_toEndOf="@+id/tvTotalTimeInfo"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />

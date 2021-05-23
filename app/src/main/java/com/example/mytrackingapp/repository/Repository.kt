@@ -23,5 +23,4 @@ class Repository @Inject constructor(
     fun getTotalTime() = trackDao.getTolatTime()
 
 
-
 }

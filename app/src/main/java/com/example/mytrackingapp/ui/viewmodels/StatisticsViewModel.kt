@@ -1,14 +1,13 @@
 package com.example.mytrackingapp.ui.viewmodels
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import com.example.mytrackingapp.repository.Repository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 
 
 //Collect Data from Repository and provide it for fragments
-@HiltViewModel
-class StatisticsViewModel  @Inject constructor (
+//@HiltViewModel
+class StatisticsViewModel  @ViewModelInject constructor (
     val Repository: Repository) : ViewModel(){
 
 

@@ -3,9 +3,11 @@
 
     <item android:id="@+id/trackFragment"
         android:title="@string/your_tracks"
+        android:enabled="true"
         android:icon="@drawable/ic_baseline_home_24" />
 
     <item android:id="@+id/statisticsFragment"
         android:title="@string/statistics"
+        android:enabled="true"
         android:icon="@drawable/ic_baseline_view_list_24" />
 </menu>

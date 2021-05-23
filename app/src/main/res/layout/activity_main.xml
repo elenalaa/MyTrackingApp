@@ -38,10 +38,9 @@
         </com.google.android.material.appbar.MaterialToolbar>
 
 
-
     </com.google.android.material.appbar.AppBarLayout>
 
-    <RelativeLayout
+    <!--<RelativeLayout
         android:id="@+id/mainContainer"
         android:layout_width="409dp"
         android:layout_height="223dp"
@@ -124,7 +123,9 @@
 
                 <Space
                     android:layout_width="50dp"
-                    android:layout_height="wrap_content"></Space>
+                    android:layout_height="wrap_content">
+
+                </Space>
 
                 <TextView
                     android:id="@+id/temp_max"
@@ -148,21 +149,22 @@
         app:layout_constraintEnd_toEndOf="@+id/mainContainer">
 
     </ProgressBar>
+
     <TextView
         android:id="@+id/errorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="Something is wrong"
         android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         tools:ignore="MissingConstraints">
 
     </TextView>
-
+-->
     <FrameLayout
         android:id="@+id/flFragment"
-        android:layout_width="408dp"
-        android:layout_height="308dp"
+        android:layout_width="412dp"
+        android:layout_height="547dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -173,10 +175,10 @@
         <fragment
             android:id="@+id/navHostFragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="414dp"
-            android:layout_height="313dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:defaultNavHost="true"
-            app:navGraph="@navigation/navig_graph" />
+            app:navGraph="@navigation/nav_graph" />
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

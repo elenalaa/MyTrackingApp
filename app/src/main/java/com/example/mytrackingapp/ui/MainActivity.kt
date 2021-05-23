@@ -3,20 +3,14 @@ package com.example.mytrackingapp.ui
 
 //import kotlinx.android.synthetic.main.activity_main.*
 
-import android.os.AsyncTask
 import android.os.Bundle
-import android.view.View
-import android.widget.ProgressBar
-import android.widget.RelativeLayout
-import android.widget.TextView
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.example.mytrackingapp.R
-import org.json.JSONObject
-import java.net.URL
-import java.text.SimpleDateFormat
-import java.util.*
-
+import com.example.mytrackingapp.ui.fragments.StatisticsFragment
+import com.example.mytrackingapp.ui.fragments.TrackFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,21 +18,54 @@ class MainActivity : AppCompatActivity() {
     val CITY: String = "helsinki,fi"
     val API: String = "ea24a5db5d70a7fa2d93a248d0fd9029"
 
+    /*private val trackFragment = TrackFragment()
+    private val trackingFragment = TrackingFragment()
+    private val statisticsFragment = StatisticsFragment()*/
+    // lateinit var toolbar: ActionBar
+    var selectedFragment: Fragment? = null
 
-
-    private lateinit var toolbar: ActionBar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-         weatherTask().execute()
-
         //toolbar = supportActionBar!!
-        //val bottomNavigation: BottomNavigationView = findViewById(R.id.bottomNavigationView)
+        val bottomNavigation: BottomNavigationView = findViewById(R.id.bottomNavigationView)
 
+        bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        //weatherTask().execute()
     }
 
-    inner class weatherTask() : AsyncTask<String, Void, String>()
+    private val mOnNavigationItemSelectedListener =
+        BottomNavigationView.OnNavigationItemSelectedListener() { item ->
+
+            when (item.itemId) {
+                R.id.trackFragment -> {
+                    selectedFragment = TrackFragment.newInstance()
+                    val transaction : FragmentTransaction = getSupportFragmentManager().beginTransaction()
+                    transaction.replace(R.id.flFragment, selectedFragment as TrackFragment)
+                    transaction.addToBackStack(null)
+                    transaction.commit()
+                    //openFragment(trackFragment)
+                    return@OnNavigationItemSelectedListener true
+                }
+
+                R.id.statisticsFragment -> {
+                    //val statisticsFragment = StatisticsFragment.newInstance()
+                    selectedFragment = StatisticsFragment.newInstance()
+                    val transaction : FragmentTransaction = getSupportFragmentManager().beginTransaction()
+                    transaction.replace(R.id.flFragment, selectedFragment as StatisticsFragment)
+                    transaction.addToBackStack(null)
+                    transaction.commit()
+                    return@OnNavigationItemSelectedListener true
+                }
+            }
+            false
+        }
+
+
+}
+
+
+/*inner class weatherTask() : AsyncTask<String, Void, String>()
     {
         override fun onPreExecute() {
             super.onPreExecute()
@@ -90,10 +117,10 @@ class MainActivity : AppCompatActivity() {
                 findViewById<TextView>(R.id.temp_min).text = tempMin
                 findViewById<TextView>(R.id.temp_max).text = tempMax
                 //findViewById<TextView>(R.id.sunrise).text = SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(sunrise*1000))
-                // findViewById<TextView>(R.id.sunset).text = SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(sunset*1000))
-                //  findViewById<TextView>(R.id.wind).text = windSpeed
-                // findViewById<TextView>(R.id.pressure).text = pressure
-                // findViewById<TextView>(R.id.humidity).text = humidity
+                //findViewById<TextView>(R.id.sunset).text = SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(sunset*1000))
+                //findViewById<TextView>(R.id.wind).text = windSpeed
+                //findViewById<TextView>(R.id.pressure).text = pressure
+                //findViewById<TextView>(R.id.humidity).text = humidity
 
 
                 findViewById<ProgressBar>(R.id.loader).visibility = View.GONE
@@ -104,7 +131,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-}
+}*/
 
 
     /*companion object {

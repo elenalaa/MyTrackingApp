@@ -2,13 +2,14 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navig_graph"
+    android:id="@+id/nav_graph"
     app:startDestination="@id/trackFragment">
 
     <fragment
         android:id="@+id/trackingFragment"
         android:name="com.example.mytrackingapp.ui.fragments.TrackingFragment"
-        android:label="TrackingFragment" >
+        android:label="TrackingFragment"
+        tools:layout="@layout/fragment_tracking">
         <action
             android:id="@+id/action_trackingFragment_to_trackFragment"
             app:destination="@id/trackFragment" />
@@ -16,11 +17,13 @@
     <fragment
         android:id="@+id/statisticsFragment"
         android:name="com.example.mytrackingapp.ui.fragments.StatisticsFragment"
-        android:label="StatisticsFragment" />
+        android:label="StatisticsFragment"
+        tools:layout="@layout/fragment_statistics"/>
     <fragment
         android:id="@+id/trackFragment"
         android:name="com.example.mytrackingapp.ui.fragments.TrackFragment"
-        android:label="TrackFragment" >
+        android:label="TrackFragment"
+        tools:layout="@layout/fragment_track">
         <action
             android:id="@+id/action_trackFragment_to_trackingFragment"
             app:destination="@id/trackingFragment" />

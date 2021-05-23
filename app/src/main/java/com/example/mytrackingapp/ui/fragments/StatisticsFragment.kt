@@ -8,9 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.mytrackingapp.R
 import com.example.mytrackingapp.ui.viewmodels.StatisticsViewModel
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
+//@AndroidEntryPoint
 class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
     private val viewModel: StatisticsViewModel by viewModels()
 
@@ -19,5 +18,11 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
 
     companion object {
         fun newInstance(): StatisticsFragment = StatisticsFragment()
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+
     }
 }
