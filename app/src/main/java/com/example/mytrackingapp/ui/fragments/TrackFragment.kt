@@ -23,18 +23,17 @@ class TrackFragment : Fragment (R.layout.fragment_track), EasyPermissions.Permis
 
     private val viewModel: MainViewModel by viewModels()
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requestPermissions()
-
-
-
+        /*button_fab.setOnClickListener {
+            findNavController().navigate(R.id.action_trackFragment_to_trackingFragment)
+        }*/
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_track, container, false)
-
-
 
     companion object {
         fun newInstance(): TrackFragment = TrackFragment()

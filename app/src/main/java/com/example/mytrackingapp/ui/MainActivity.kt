@@ -10,28 +10,25 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.mytrackingapp.R
 import com.example.mytrackingapp.ui.fragments.StatisticsFragment
 import com.example.mytrackingapp.ui.fragments.TrackFragment
+import com.example.mytrackingapp.ui.fragments.TrackingFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
 
-    val CITY: String = "helsinki,fi"
-    val API: String = "ea24a5db5d70a7fa2d93a248d0fd9029"
+    //val CITY: String = "helsinki,fi"
+    //val API: String = "ea24a5db5d70a7fa2d93a248d0fd9029"
 
-    /*private val trackFragment = TrackFragment()
-    private val trackingFragment = TrackingFragment()
-    private val statisticsFragment = StatisticsFragment()*/
-    // lateinit var toolbar: ActionBar
     var selectedFragment: Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //toolbar = supportActionBar!!
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottomNavigationView)
 
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        //weatherTask().execute()
+        // weatherTask().execute()
     }
 
     private val mOnNavigationItemSelectedListener =
@@ -40,18 +37,25 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.trackFragment -> {
                     selectedFragment = TrackFragment.newInstance()
-                    val transaction : FragmentTransaction = getSupportFragmentManager().beginTransaction()
+                    val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
                     transaction.replace(R.id.flFragment, selectedFragment as TrackFragment)
                     transaction.addToBackStack(null)
                     transaction.commit()
-                    //openFragment(trackFragment)
+                    return@OnNavigationItemSelectedListener true
+                }
+
+                R.id.trackingFragment -> {
+                    selectedFragment = TrackingFragment.newInstance()
+                    val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+                    transaction.replace(R.id.flFragment, selectedFragment as TrackingFragment)
+                    transaction.addToBackStack(null)
+                    transaction.commit()
                     return@OnNavigationItemSelectedListener true
                 }
 
                 R.id.statisticsFragment -> {
-                    //val statisticsFragment = StatisticsFragment.newInstance()
                     selectedFragment = StatisticsFragment.newInstance()
-                    val transaction : FragmentTransaction = getSupportFragmentManager().beginTransaction()
+                    val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
                     transaction.replace(R.id.flFragment, selectedFragment as StatisticsFragment)
                     transaction.addToBackStack(null)
                     transaction.commit()
@@ -60,12 +64,9 @@ class MainActivity : AppCompatActivity() {
             }
             false
         }
-
-
 }
 
-
-/*inner class weatherTask() : AsyncTask<String, Void, String>()
+   /* inner class weatherTask() : AsyncTask<String, Void, String>()
     {
         override fun onPreExecute() {
             super.onPreExecute()
@@ -131,8 +132,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-}*/
-
+}
+*/
 
     /*companion object {
         private fun openFragment(mainActivity: MainActivity, fragment: Fragment) {
