@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.mytrackingapp.R
 import com.example.mytrackingapp.ui.fragments.StatisticsFragment
 import com.example.mytrackingapp.ui.fragments.TrackFragment
-import com.example.mytrackingapp.ui.fragments.TrackingFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.*
 
@@ -26,11 +25,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottomNavigationView)
-
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        // weatherTask().execute()
+
+    // weatherTask().execute()
+
     }
 
+    fun changeFragment(fragment: Fragment){
+        supportFragmentManager.beginTransaction().replace(R.id.flFragment, fragment).addToBackStack(null).commit()
+    }
     private val mOnNavigationItemSelectedListener =
         BottomNavigationView.OnNavigationItemSelectedListener() { item ->
 
@@ -44,14 +47,14 @@ class MainActivity : AppCompatActivity() {
                     return@OnNavigationItemSelectedListener true
                 }
 
-                R.id.trackingFragment -> {
+                /*R.id.trackingFragment -> {
                     selectedFragment = TrackingFragment.newInstance()
                     val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
                     transaction.replace(R.id.flFragment, selectedFragment as TrackingFragment)
                     transaction.addToBackStack(null)
                     transaction.commit()
                     return@OnNavigationItemSelectedListener true
-                }
+                }*/
 
                 R.id.statisticsFragment -> {
                     selectedFragment = StatisticsFragment.newInstance()

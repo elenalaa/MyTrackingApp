@@ -2,6 +2,7 @@ package com.example.mytrackingapp.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,16 +14,21 @@ import com.example.mytrackingapp.moredbclasses.Constants.ACTION_START_OR_RESUME_
 import com.example.mytrackingapp.service.TrackingService
 import com.example.mytrackingapp.ui.viewmodels.MainViewModel
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 
 
 //@AndroidEntryPoint
-class TrackingFragment : Fragment(R.layout.fragment_tracking) {
+class TrackingFragment : Fragment(R.layout.fragment_tracking), OnMapReadyCallback {
     //val CITY: String = "helsinki,fi"
     //val API: String = "ea24a5db5d70a7fa2d93a248d0fd9029"
-    private var map: GoogleMap? = null
-    private val btnToggleTrack: Button? = getView()?.findViewById(R.id.btnToggleTrack)
-    private val mapView: MapView? = getView()?.findViewById(R.id.mapView) as MapView
+    private lateinit var map: GoogleMap
+    private val isTracking = false
+    //private var trackPoints = mutableListOf<>()
+
+
+    private val btnToggleTrack: Button? = view?.findViewById<Button>(R.id.btnToggleTrack)
+    private var mapView: SupportMapFragment?=null
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -35,21 +41,23 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
 
     companion object {
         fun newInstance(): TrackingFragment = TrackingFragment()
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //val mapView: MapView = getView()?.findViewById(R.id.mapView) as MapView
 
-        mapView?.onCreate(savedInstanceState)
-        //val btnToggleTrack: Button? = getView()?.findViewById(R.id.btnToggleTrack)
+        //mapView.onCreate(savedInstanceState)
         btnToggleTrack?.setOnClickListener {
             sendCommandToService(ACTION_START_OR_RESUME_SERVICE)
         }
-        mapView!!.getMapAsync {
-            map = it
-        }
+        mapView = fragmentManager?.findFragmentById(R.id.mapView) as SupportMapFragment?
+        Log.println(Log.INFO,"gde", "tut2")
+        mapView?.getMapAsync (this)
+        Log.println(Log.INFO,"gde", mapView.toString())
     }
+
+
 
 
     private fun sendCommandToService(action: String) =
@@ -86,6 +94,13 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         mapView?.onSaveInstanceState(outState)
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        Log.println(Log.INFO,"gde", "tut")
+        if(googleMap != null ){
+            map= googleMap
+        }
     }
 }
 

@@ -11,7 +11,9 @@ import androidx.fragment.app.viewModels
 import com.example.mytrackingapp.R
 import com.example.mytrackingapp.moredbclasses.Constants.REQUEST_CODE_LOCATION
 import com.example.mytrackingapp.moredbclasses.TrackingPermissions
+import com.example.mytrackingapp.ui.MainActivity
 import com.example.mytrackingapp.ui.viewmodels.MainViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 
@@ -27,13 +29,32 @@ class TrackFragment : Fragment (R.layout.fragment_track), EasyPermissions.Permis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requestPermissions()
-        /*button_fab.setOnClickListener {
-            findNavController().navigate(R.id.action_trackFragment_to_trackingFragment)
+        val butt = getView()?.findViewById<FloatingActionButton>(R.id.button_fab)
+        //val trackingFragment = TrackingFragment()
+        butt?.setOnClickListener() {
+            (context as MainActivity).changeFragment(TrackingFragment.newInstance())
+            //findNavController().navigate(R.id.action_trackFragment_to_trackingFragment)
+        }
+
+
+       /* butt.setOnClickListener {
+            val trackingFragment = TrackingFragment()
+            val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
+            transaction.replace(R.id.trackFragment,trackingFragment)
+            transaction.commit()
         }*/
+
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? =
         inflater.inflate(R.layout.fragment_track, container, false)
+
+
+
 
     companion object {
         fun newInstance(): TrackFragment = TrackFragment()

@@ -37,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@+id/spFilter"
         app:layout_constraintVertical_bias="0.0" />
 
-   <!-- <com.google.android.material.floatingactionbutton.FloatingActionButton
+   <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,6 +50,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:rippleColor="@android:color/white"
-        app:tint="@android:color/black" />-->
+        app:tint="@android:color/black" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
