@@ -73,13 +73,19 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="68dp"
         android:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/longitude_text"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
         tools:ignore="HardcodedText" />
 
-    <!--<TextView
+   <fragment
+        class="com.google.android.gms.maps.MapFragment"
+        android:id="@+id/mapView"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
         android:id="@+id/speed_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -90,128 +96,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />-->
-
-    <!--  <RelativeLayout
-        android:id="@+id/mainContainer"
-        android:layout_width="411dp"
-        android:layout_height="181dp"
-        android:visibility="visible"
-
-        app:layout_constraintBottom_toTopOf="@+id/mapView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-
-        app:layout_constraintStart_toStartOf="parent">
-
-        <LinearLayout
-            android:id="@+id/addressContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Location"
-                android:textSize="24sp">
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/updated_at"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Updated at"
-                android:textSize="14sp">
-
-            </TextView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/overviewContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Clear Sky"
-                android:textSize="18sp">
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/temp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="sans-serif-thin"
-                android:gravity="center"
-                android:text="18 C"
-                android:textSize="42sp">
-
-            </TextView>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/temp_min"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Min temperature">
-
-                </TextView>
-
-                <Space
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content">
-
-                </Space>
-
-                <TextView
-                    android:id="@+id/temp_max"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Max temperature">
-
-                </TextView>
-            </LinearLayout>
-
-        </LinearLayout>
-    </RelativeLayout>
-
-    <ProgressBar
-        android:id="@+id/loader"
-        android:layout_width="53dp"
-        android:layout_height="78dp"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/mainContainer"
-        app:layout_constraintEnd_toEndOf="@+id/mainContainer">
-
-    </ProgressBar>
-
-    <TextView
-        android:id="@+id/errorText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Something is wrong"
-        android:visibility="gone"
-        tools:ignore="MissingConstraints">
-
-    </TextView>-->
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/longitude_text"
@@ -223,7 +108,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-    <com.google.android.gms.maps.MapView
+
+
+
+  <!-- <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="409dp"
         android:layout_height="298dp"
@@ -231,7 +119,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/longitude_text"
-        app:layout_constraintVertical_bias="0.89" />
+        app:layout_constraintVertical_bias="0.89" />-->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,7 @@
     <string name="longitude_string">Longitude %1$s</string>
     <string name="speed_string">Speed: %1$s</string>
     <string name="start_button">Start New Tracking</string>
-    <string name="api_key">string_api_key</string>
+    <string name="api_key">ea24a5db5d70a7fa2d93a248d0fd9029</string>
     <string name="your_tracks">Your Tracks</string>
     <string name="statistics">Statistics</string>
     <string name="my_tracking_app">My Tracking App</string>

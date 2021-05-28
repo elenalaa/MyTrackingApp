@@ -30,20 +30,11 @@ class TrackFragment : Fragment (R.layout.fragment_track), EasyPermissions.Permis
         super.onViewCreated(view, savedInstanceState)
         requestPermissions()
         val butt = getView()?.findViewById<FloatingActionButton>(R.id.button_fab)
-        //val trackingFragment = TrackingFragment()
+
         butt?.setOnClickListener() {
             (context as MainActivity).changeFragment(TrackingFragment.newInstance())
             //findNavController().navigate(R.id.action_trackFragment_to_trackingFragment)
         }
-
-
-       /* butt.setOnClickListener {
-            val trackingFragment = TrackingFragment()
-            val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
-            transaction.replace(R.id.trackFragment,trackingFragment)
-            transaction.commit()
-        }*/
-
     }
 
     override fun onCreateView(
@@ -52,9 +43,6 @@ class TrackFragment : Fragment (R.layout.fragment_track), EasyPermissions.Permis
         savedInstanceState: Bundle?
     ): View? =
         inflater.inflate(R.layout.fragment_track, container, false)
-
-
-
 
     companion object {
         fun newInstance(): TrackFragment = TrackFragment()

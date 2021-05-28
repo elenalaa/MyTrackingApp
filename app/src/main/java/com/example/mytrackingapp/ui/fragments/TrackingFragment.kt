@@ -16,21 +16,27 @@ import com.example.mytrackingapp.ui.viewmodels.MainViewModel
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 
 
 //@AndroidEntryPoint
-class TrackingFragment : Fragment(R.layout.fragment_tracking), OnMapReadyCallback {
+@Suppress("DEPRECATION")
+class TrackingFragment : Fragment(), OnMapReadyCallback {
     //val CITY: String = "helsinki,fi"
     //val API: String = "ea24a5db5d70a7fa2d93a248d0fd9029"
     private lateinit var map: GoogleMap
+    private var mapView: SupportMapFragment? = null
+
     private val isTracking = false
     //private var trackPoints = mutableListOf<>()
 
 
     private val btnToggleTrack: Button? = view?.findViewById<Button>(R.id.btnToggleTrack)
-    private var mapView: SupportMapFragment?=null
+
 
     private val viewModel: MainViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,17 +53,15 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking), OnMapReadyCallbac
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //mapView.onCreate(savedInstanceState)
         btnToggleTrack?.setOnClickListener {
             sendCommandToService(ACTION_START_OR_RESUME_SERVICE)
         }
+
         mapView = fragmentManager?.findFragmentById(R.id.mapView) as SupportMapFragment?
         Log.println(Log.INFO,"gde", "tut2")
         mapView?.getMapAsync (this)
         Log.println(Log.INFO,"gde", mapView.toString())
     }
-
-
 
 
     private fun sendCommandToService(action: String) =
@@ -98,9 +102,12 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking), OnMapReadyCallbac
 
     override fun onMapReady(googleMap: GoogleMap) {
         Log.println(Log.INFO,"gde", "tut")
-        if(googleMap != null ){
-            map= googleMap
-        }
+        googleMap.addMarker(
+            MarkerOptions()
+                .position(LatLng(0.0, 0.0))
+                .title("You are here!")
+        )
+        map= googleMap
     }
 }
 
