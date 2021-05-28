@@ -41,8 +41,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-
-    <!--<RelativeLayout
+    <RelativeLayout
         android:id="@+id/mainContainer"
         android:layout_width="409dp"
         android:layout_height="223dp"
@@ -162,7 +161,7 @@
         tools:ignore="MissingConstraints">
 
     </TextView>
--->
+
     <FrameLayout
         android:id="@+id/flFragment"
         android:layout_width="412dp"

@@ -3,7 +3,12 @@ package com.example.mytrackingapp.ui
 
 //import kotlinx.android.synthetic.main.activity_main.*
 
+import android.os.AsyncTask
 import android.os.Bundle
+import android.view.View
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -11,13 +16,16 @@ import com.example.mytrackingapp.R
 import com.example.mytrackingapp.ui.fragments.StatisticsFragment
 import com.example.mytrackingapp.ui.fragments.TrackFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import org.json.JSONObject
+import java.net.URL
+import java.text.SimpleDateFormat
 import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
 
-    //val CITY: String = "helsinki,fi"
-    //val API: String = "ea24a5db5d70a7fa2d93a248d0fd9029"
+    val CITY: String = "helsinki,fi"
+    val API: String = "ea24a5db5d70a7fa2d93a248d0fd9029"
 
     var selectedFragment: Fragment? = null
 
@@ -27,13 +35,15 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-    // weatherTask().execute()
+        weatherTask().execute()
 
     }
 
-    fun changeFragment(fragment: Fragment){
-        supportFragmentManager.beginTransaction().replace(R.id.flFragment, fragment).addToBackStack(null).commit()
+    fun changeFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.flFragment, fragment)
+            .addToBackStack(null).commit()
     }
+
     private val mOnNavigationItemSelectedListener =
         BottomNavigationView.OnNavigationItemSelectedListener() { item ->
 
@@ -67,10 +77,9 @@ class MainActivity : AppCompatActivity() {
             }
             false
         }
-}
 
-   /* inner class weatherTask() : AsyncTask<String, Void, String>()
-    {
+
+    inner class weatherTask() : AsyncTask<String, Void, String>() {
         override fun onPreExecute() {
             super.onPreExecute()
             findViewById<ProgressBar>(R.id.loader).visibility = View.VISIBLE
@@ -135,17 +144,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-}
-*/
 
-    /*companion object {
+
+    companion object {
         private fun openFragment(mainActivity: MainActivity, fragment: Fragment) {
             val transaction = mainActivity.supportFragmentManager.beginTransaction()
             transaction.replace(R.id.container, fragment)
             transaction.addToBackStack(null)
             transaction.commit()
         }
-    }*/
+    }
+}
 
 
 
