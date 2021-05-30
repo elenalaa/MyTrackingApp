@@ -1,9 +1,11 @@
+
 package com.example.mytrackingapp.service
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.location.Location
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -12,6 +14,7 @@ import com.example.mytrackingapp.moredbclasses.Constants.ACTION_START_OR_RESUME_
 import com.example.mytrackingapp.moredbclasses.Constants.ACTION_STOP_SERVICE
 import com.example.mytrackingapp.moredbclasses.Constants.FASTEST_LOCATION_INTERVAL
 import com.example.mytrackingapp.moredbclasses.Constants.LOCATION_UPDATE_INTERVAL
+import com.example.mytrackingapp.moredbclasses.Constants.TIMER_UPDATE_INTERVAL
 import com.example.mytrackingapp.moredbclasses.TrackingPermissions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -19,9 +22,12 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class TrackingService : LifecycleService() {
-
 
     var firstTrack = true
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -37,6 +43,7 @@ class TrackingService : LifecycleService() {
     private fun postInitialValues() {
         isTracking.postValue(false)
         trackPoints.postValue(mutableListOf())
+
     }
 
     @SuppressLint("VisibleForTests")
@@ -54,38 +61,75 @@ class TrackingService : LifecycleService() {
         intent?.let {
             when (it.action) {
                 ACTION_START_OR_RESUME_SERVICE -> {
+                    if(firstTrack) {
+                        firstTrack = false
+                    } else{
+                        startTimer()
+                        Log.println(Log.INFO,"start", "start tracking")
+                    }
 
                 }
                 ACTION_PAUSE_SERVICE -> {
+                    pauseService()
 
                 }
                 ACTION_STOP_SERVICE -> {
 
                 }
+                else -> Log.println(Log.INFO,"stop", "stop tracking")
             }
         }
         return super.onStartCommand(intent, flags, startId)
     }
 
+
+
+
+    private fun pauseService() {
+        isTracking.postValue(false)
+        timeEnable = false
+    }
+
     private var timeEnable = false
     //Time for pause
     private var lapTime = 0L
-    //Final time of track
+    //Final total time of track
     private var timeTrack = 0L
+    private var timestamp = 0L
+    private var lastMoment = 0L
+    private var timeStarted = 0L
 
-    val locationCallBack = object : LocationCallback() {
+    private fun startTimer(){
+        isTracking.postValue(true)
+        timeStarted = System.currentTimeMillis()
+        timeEnable = true
+        CoroutineScope(Dispatchers.Main!!).launch{
+            while(isTracking.value!!) {
+                lapTime = System.currentTimeMillis()-timeStarted
+
+                time.postValue(timeTrack+lapTime)
+
+            }
+            delay(TIMER_UPDATE_INTERVAL)
+        }
+        timeTrack += lapTime
+    }
+
+
+private val locationCallBack = object : LocationCallback() {
         override fun onLocationResult(result: LocationResult) {
             super.onLocationResult(result)
             if (isTracking.value!!) {
-                result?.locations.let { location ->
+                result.locations.let { location ->
                     for (location in location) {
                         addTrackPoint(location)
-
+                        Log.println(Log.INFO,"novaja location", "${location.latitude}")
                     }
                 }
             }
         }
     }
+
 
     private fun addTrackPoint(location: Location?) {
         location?.let {

@@ -13,15 +13,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.mytrackingapp.R
+import com.example.mytrackingapp.ui.fragments.ArFragment
 import com.example.mytrackingapp.ui.fragments.StatisticsFragment
 import com.example.mytrackingapp.ui.fragments.TrackFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     val CITY: String = "helsinki,fi"
@@ -57,14 +59,14 @@ class MainActivity : AppCompatActivity() {
                     return@OnNavigationItemSelectedListener true
                 }
 
-                /*R.id.trackingFragment -> {
-                    selectedFragment = TrackingFragment.newInstance()
+                R.id.arFragment-> {
+                    selectedFragment = ArFragment.newInstance()
                     val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-                    transaction.replace(R.id.flFragment, selectedFragment as TrackingFragment)
+                    transaction.replace(R.id.flFragment, selectedFragment as ArFragment)
                     transaction.addToBackStack(null)
                     transaction.commit()
                     return@OnNavigationItemSelectedListener true
-                }*/
+                }
 
                 R.id.statisticsFragment -> {
                     selectedFragment = StatisticsFragment.newInstance()

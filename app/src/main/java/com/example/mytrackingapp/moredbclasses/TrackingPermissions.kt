@@ -6,6 +6,7 @@ import android.os.Build
 import pub.devrel.easypermissions.EasyPermissions
 
 object TrackingPermissions {
+
     fun checkLocationPermissions(context: Context) =
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             EasyPermissions.hasPermissions(
@@ -21,4 +22,6 @@ object TrackingPermissions {
                 Manifest.permission.ACCESS_BACKGROUND_LOCATION
             )
         }
+
+
 }

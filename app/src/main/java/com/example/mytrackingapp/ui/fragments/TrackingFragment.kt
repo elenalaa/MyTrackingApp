@@ -1,6 +1,8 @@
 package com.example.mytrackingapp.ui.fragments
 
 import android.content.Intent
+import android.graphics.Point
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,33 +11,41 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.mytrackingapp.R
+import com.example.mytrackingapp.moredbclasses.Constants.ACTION_PAUSE_SERVICE
 import com.example.mytrackingapp.moredbclasses.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.example.mytrackingapp.service.TrackingService
 import com.example.mytrackingapp.ui.viewmodels.MainViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.Marker
 
 
 //@AndroidEntryPoint
 @Suppress("DEPRECATION")
-class TrackingFragment : Fragment(), OnMapReadyCallback {
+class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     //val CITY: String = "helsinki,fi"
-    //val API: String = "ea24a5db5d70a7fa2d93a248d0fd9029"
-    private lateinit var map: GoogleMap
+    private val viewModel: MainViewModel by viewModels()
+    private var map: GoogleMap? = null
     private var mapView: SupportMapFragment? = null
 
-    private val isTracking = false
-    //private var trackPoints = mutableListOf<>()
+    internal lateinit var mLastLocation: Location
+    internal lateinit var mLocationResult: LocationRequest
+    internal lateinit var mLocationCallback: LocationCallback
+    internal var mCurrLocationMarker: Marker? = null
+    //internal var mGoogleApiClient: GoogleApiClient? = null
+    internal lateinit var mLocationRequest: LocationRequest
+    internal var mFusedLocationClient: FusedLocationProviderClient? = null
+
+    private var isTracking = false
+    private var trackPoints = mutableListOf<Point>()
 
 
     private val btnToggleTrack: Button? = view?.findViewById<Button>(R.id.btnToggleTrack)
-
-
-    private val viewModel: MainViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -52,17 +62,52 @@ class TrackingFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        mapView?.onCreate(savedInstanceState)
         btnToggleTrack?.setOnClickListener {
             sendCommandToService(ACTION_START_OR_RESUME_SERVICE)
+            toggleTrack()
         }
-
         mapView = fragmentManager?.findFragmentById(R.id.mapView) as SupportMapFragment?
         Log.println(Log.INFO,"gde", "tut2")
-        mapView?.getMapAsync (this)
-        Log.println(Log.INFO,"gde", mapView.toString())
+        mapView?.getMapAsync {
+            map = it
+        }
+        Log.println(Log.INFO, "gde", mapView.toString())
+        subscribeToObservers()
     }
 
+    //When isTracking TrackingService will be updated by Observer
+    private fun subscribeToObservers() {
+        TrackingService.isTracking.observe(viewLifecycleOwner, Observer {
+            updateTracking(it)
+        })
+
+        TrackingService.trackPoints.observe(viewLifecycleOwner, Observer {
+            trackPoints = trackPoints
+            //moveCameraToUser()
+
+        })
+    }
+
+    private fun toggleTrack() {
+        if (isTracking) {
+            sendCommandToService(ACTION_PAUSE_SERVICE)
+        } else {
+            sendCommandToService(ACTION_START_OR_RESUME_SERVICE)
+        }
+    }
+
+
+    private fun updateTracking(isTracking: Boolean) {
+        this.isTracking = isTracking
+        if (!isTracking) {
+            btnToggleTrack!!.text = "Start"
+            btnToggleTrack.visibility = View.VISIBLE
+        } else {
+            btnToggleTrack!!.text = "Stop"
+            btnToggleTrack.visibility = View.GONE
+        }
+    }
 
     private fun sendCommandToService(action: String) =
         Intent(requireContext(), TrackingService::class.java).also {
@@ -100,16 +145,28 @@ class TrackingFragment : Fragment(), OnMapReadyCallback {
         mapView?.onSaveInstanceState(outState)
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
+
+    /*override fun onMapReady(googleMap: GoogleMap) {
         Log.println(Log.INFO,"gde", "tut")
+
+        map= googleMap as GoogleMap
+      val sydney = LatLng(-34.0, 151.0)
+
         googleMap.addMarker(
             MarkerOptions()
-                .position(LatLng(0.0, 0.0))
-                .title("You are here!")
-        )
-        map= googleMap
-    }
+                .position(sydney)
+                .title("You are here!"))
+        googleMap.moveCamera(newLatLng(sydney))
+        Log.println(Log.INFO, "gde camera", googleMap.cameraPosition.toString())
+
+    }*/
+
 }
+
+
+
+
+
 
 
 
