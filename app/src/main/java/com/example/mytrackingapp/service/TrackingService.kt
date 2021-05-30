@@ -1,20 +1,28 @@
-
+@file:Suppress("DEPRECATION")
 
 package com.example.mytrackingapp.service
 
-//import com.example.mytrackingapp.moredbclasses.TrackingPermissions
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_LOW
+import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.os.Build
+import android.os.Looper
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.example.mytrackingapp.moredbclasses.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.example.mytrackingapp.moredbclasses.Constants.ACTION_STOP_SERVICE
+import com.example.mytrackingapp.moredbclasses.Constants.FASTEST_LOCATION_INTERVAL
+import com.example.mytrackingapp.moredbclasses.Constants.LOCATION_UPDATE_INTERVAL
 import com.example.mytrackingapp.moredbclasses.Constants.NOTIFICATION_CHANNEL_ID
 import com.example.mytrackingapp.moredbclasses.Constants.NOTIFICATION_CHANNEL_NAME
+import com.example.mytrackingapp.moredbclasses.Constants.NOTIFICATION_ID
+import com.google.android.gms.location.*
+import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -22,10 +30,9 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class TrackingService : LifecycleService() {
 
-    /* var firstTrack = true
+    //var firstTrack = true
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
-    private val time = MutableLiveData<Long>()*/
+    //private val time = MutableLiveData<Long>()
 
     @Inject
     lateinit var notificationManager: NotificationManager
@@ -35,35 +42,60 @@ class TrackingService : LifecycleService() {
 
     companion object {
         val started = MutableLiveData<Boolean>()
-        val time = MutableLiveData<Long>()
-        val isTracking = MutableLiveData<Boolean>()
-        val trackPoints = MutableLiveData<MutableList<LatLng>>()
+        var startTime = MutableLiveData<Long>()
+        var stopTime = MutableLiveData<Long>()
+        val trackPointsList = MutableLiveData<MutableList<LatLng>>()
     }
 
     private fun postInitialValues() {
         started.postValue(false)
-        isTracking.postValue(false)
-        trackPoints.postValue(mutableListOf())
+        trackPointsList.postValue(mutableListOf())
+        startTime.postValue(0L)
+        stopTime.postValue(0L)
     }
+
+    private val locationCallBack = object : LocationCallback() {
+        override fun onLocationResult(result: LocationResult) {
+            super.onLocationResult(result)
+            result?.locations?.let { locations ->
+                for (location in locations) {
+                    updateTrackPointList(location)
+
+                }
+            }
+        }
+    }
+
+    private fun updateTrackPointList(location: Location?) {
+        val newLatLng = LatLng(location!!.latitude, location.longitude)
+        trackPointsList.value?.apply {
+            add(newLatLng)
+            trackPointsList.postValue(this)
+        }
+   }
+
 
     override fun onCreate() {
         postInitialValues()
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         super.onCreate()
+        /*isTracking.observe(this, Observer {
+            updateLocationTracking(it)*/
     }
-    /*  fusedLocationProviderClient = FusedLocationProviderClient(this)
 
-        isTracking.observe(this, Observer {
-            updateLocationTracking(it)
-        })
-    }*/
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
             when (it.action) {
                 ACTION_START_OR_RESUME_SERVICE -> {
                     started.postValue(true)
+                    startForegroundService()
+                    startLocationUpdates()
                 }
-                ACTION_STOP_SERVICE -> started.postValue(false)
+                ACTION_STOP_SERVICE -> {
+                    started.postValue(false)
+                    stopForegroundService()
+                }
                 else -> {
                 }
             }
@@ -71,7 +103,26 @@ class TrackingService : LifecycleService() {
             return super.onStartCommand(intent, flags, startId)
         }
 
-        private fun createNotificationChannel() {
+    private fun startForegroundService(){
+        createNotificationChannel()
+        startForeground(NOTIFICATION_ID, notification.build())
+    }
+
+    private fun stopForegroundService() {
+        removeLocationUpdates()
+        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancel(
+            NOTIFICATION_ID
+        )
+        stopForeground(true)
+        stopSelf()
+        startTime.postValue(System.currentTimeMillis())
+    }
+
+    private fun removeLocationUpdates() {
+        fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
+    }
+
+    private fun createNotificationChannel() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val channel = NotificationChannel(
                     NOTIFICATION_CHANNEL_ID,
@@ -82,11 +133,8 @@ class TrackingService : LifecycleService() {
             }
         }
 
-}
 
-
-/*
-        private fun pauseService() {
+/*private fun pauseService() {
         isTracking.postValue(false)
         timeEnable = false
     }
@@ -114,49 +162,24 @@ class TrackingService : LifecycleService() {
             delay(TIMER_UPDATE_INTERVAL)
         }
         timeTrack += lapTime
-    }
-
-
-private val locationCallBack = object : LocationCallback() {
-        override fun onLocationResult(result: LocationResult) {
-            super.onLocationResult(result)
-            if (isTracking.value!!) {
-                result.locations.let { location ->
-                    for (location in location) {
-                        addTrackPoint(location)
-                        Log.println(Log.INFO,"novaja location", "${location.latitude}")
-                    }
-                }
-            }
-        }
-    }
-
-
-    private fun addTrackPoint(location: Location?) {
-        location?.let {
-            val position = LatLng(location.latitude, location.longitude)
-        }
-    }
-
+    }*/
 
     @SuppressLint("MissingPermission")
-    private fun updateLocationTracking(isTracking: Boolean) {
-        if (isTracking) {
-            if (TrackingPermissions.checkLocationPermissions(this)) {
-                val request = LocationRequest().apply {
-                    interval = LOCATION_UPDATE_INTERVAL
-                    priority = PRIORITY_HIGH_ACCURACY
-                    fastestInterval = FASTEST_LOCATION_INTERVAL
-                }
-                fusedLocationProviderClient.requestLocationUpdates(
-                    request,
+    private fun startLocationUpdates() {
+        val locationRequest = LocationRequest().apply {
+            interval = LOCATION_UPDATE_INTERVAL
+            fastestInterval = FASTEST_LOCATION_INTERVAL
+            priority = PRIORITY_HIGH_ACCURACY
+        }
+        fusedLocationProviderClient.requestLocationUpdates(
+                    locationRequest,
                     locationCallBack,
                     Looper.getMainLooper()
-                )
-            } else {
-                fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
-            }
-        }
+        )
+        startTime.postValue(System.currentTimeMillis())
     }
-}*/
+}
+
+
+
 

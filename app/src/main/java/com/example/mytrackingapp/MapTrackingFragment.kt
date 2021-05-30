@@ -10,18 +10,24 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.mytrackingapp.databinding.FragmentMapTrackingBinding
 import com.example.mytrackingapp.moredbclasses.Constants.ACTION_START_OR_RESUME_SERVICE
+import com.example.mytrackingapp.moredbclasses.Constants.ACTION_STOP_SERVICE
 import com.example.mytrackingapp.moredbclasses.Functions.disable
+import com.example.mytrackingapp.moredbclasses.Functions.enable
 import com.example.mytrackingapp.moredbclasses.Functions.hide
 import com.example.mytrackingapp.moredbclasses.Functions.show
 import com.example.mytrackingapp.moredbclasses.Permissions.hasBackgroundLocationPermission
 import com.example.mytrackingapp.moredbclasses.Permissions.requestBackgroundLocationPermission
 import com.example.mytrackingapp.service.TrackingService
+import com.example.mytrackingapp.service.TrackingService.Companion.startTime
+import com.example.mytrackingapp.service.TrackingService.Companion.stopTime
+import com.example.mytrackingapp.ui.viewmodels.MapSet.cameraPosition
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -33,6 +39,8 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
 
     private lateinit var map: GoogleMap
 
+    private var locationList = mutableListOf<LatLng>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,8 +51,12 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
         binding.startButton.setOnClickListener {
             onStartButtonClicked()
         }
-        binding.stopButton.setOnClickListener { }
-        binding.stopButton.setOnClickListener { }
+        binding.stopButton.setOnClickListener {
+            onStopButtonClicked()
+        }
+        binding.restartButton.setOnClickListener {
+
+        }
 
         return binding.root
     }
@@ -66,6 +78,36 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
             isRotateGesturesEnabled = false
             isScrollGesturesEnabled = false
         }
+        observeTrackingService()
+    }
+
+    private fun observeTrackingService(){
+        TrackingService.trackPointsList.observe(viewLifecycleOwner, {
+            if (it != null)
+                locationList = it
+            if (locationList.size > 1) {
+                binding.stopButton.enable()
+            }
+            followUser()
+
+        })
+        startTime.observe(viewLifecycleOwner, {
+            startTime
+        })
+        stopTime.observe(viewLifecycleOwner, {
+            stopTime
+         })
+    }
+
+    private fun followUser(){
+        if(locationList.isNotEmpty()){
+            map.animateCamera((
+                    CameraUpdateFactory.newCameraPosition(
+                        cameraPosition(
+                            locationList.last()
+                        ))), 1000, null)
+        }
+
     }
 
     private fun onStartButtonClicked() {
@@ -79,6 +121,19 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
                 requestBackgroundLocationPermission(this)
             }
         }
+
+    private fun onStopButtonClicked() {
+        stopForegroundServices()
+        binding.stopButton.hide()
+        binding.startButton.show()
+    }
+
+    private fun stopForegroundServices() {
+        binding.startButton.disable()
+        sentActionCommandToService(ACTION_STOP_SERVICE)
+    }
+
+
     //Sent action to Service
     private fun sentActionCommandToService(action: String){
         Intent(
@@ -100,7 +155,7 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
     return false
 }
 
-
+//Permission functions
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
