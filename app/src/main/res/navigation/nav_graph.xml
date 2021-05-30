@@ -3,29 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/trackFragment">
+    app:startDestination="@id/permissionFragment">
 
     <fragment
-        android:id="@+id/trackingFragment"
-        android:name="com.example.mytrackingapp.ui.fragments.TrackingFragment"
-        android:label="TrackingFragment"
-        tools:layout="@layout/fragment_tracking">
-        <action
-            android:id="@+id/action_trackingFragment_to_trackFragment"
-            app:destination="@id/trackFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/statisticsFragment"
-        android:name="com.example.mytrackingapp.ui.fragments.StatisticsFragment"
-        android:label="StatisticsFragment"
-        tools:layout="@layout/fragment_statistics"/>
-    <fragment
         android:id="@+id/trackFragment"
-        android:name="com.example.mytrackingapp.ui.fragments.TrackFragment"
+        android:name="com.example.mytrackingapp.TrackFragment"
         android:label="TrackFragment"
         tools:layout="@layout/fragment_track">
         <action
-            android:id="@+id/action_trackFragment_to_trackingFragment"
-            app:destination="@id/trackingFragment" />
+            android:id="@+id/action_trackFragment_to_mapTrackingFragment"
+            app:destination="@id/mapTrackingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/permissionFragment"
+        android:name="com.example.mytrackingapp.PermissionFragment"
+        android:label="fragment_permission"
+        tools:layout="@layout/fragment_permission" >
+        <action
+            android:id="@+id/action_permissionFragment_to_mapTrackingFragment"
+            app:destination="@id/mapTrackingFragment"
+            app:popUpTo="@id/permissionFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapTrackingFragment"
+        android:name="com.example.mytrackingapp.MapTrackingFragment"
+        android:label="fragment_map_tracking"
+        tools:layout="@layout/fragment_map_tracking" >
+        <action
+            android:id="@+id/action_mapTrackingFragment_to_trackFragment"
+            app:destination="@id/trackFragment" />
     </fragment>
 </navigation>

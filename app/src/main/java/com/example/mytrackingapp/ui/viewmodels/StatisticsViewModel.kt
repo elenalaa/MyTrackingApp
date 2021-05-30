@@ -1,3 +1,4 @@
+/*
 package com.example.mytrackingapp.ui.viewmodels
 
 import androidx.hilt.lifecycle.ViewModelInject
@@ -11,4 +12,4 @@ class StatisticsViewModel  @ViewModelInject constructor (
     val Repository: Repository) : ViewModel(){
 
 
-}
+}*/

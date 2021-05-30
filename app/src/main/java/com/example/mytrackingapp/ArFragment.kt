@@ -1,11 +1,11 @@
-package com.example.mytrackingapp.ui.fragments
+package com.example.mytrackingapp
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.mytrackingapp.R
+
 class ArFragment : Fragment() {
     private val TAG = "EEE"
     private val MIN_OPENGL_VERSION = 3.0

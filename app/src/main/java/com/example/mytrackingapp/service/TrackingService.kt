@@ -1,4 +1,5 @@
 
+/*
 package com.example.mytrackingapp.service
 
 import android.annotation.SuppressLint
@@ -15,7 +16,7 @@ import com.example.mytrackingapp.moredbclasses.Constants.ACTION_STOP_SERVICE
 import com.example.mytrackingapp.moredbclasses.Constants.FASTEST_LOCATION_INTERVAL
 import com.example.mytrackingapp.moredbclasses.Constants.LOCATION_UPDATE_INTERVAL
 import com.example.mytrackingapp.moredbclasses.Constants.TIMER_UPDATE_INTERVAL
-import com.example.mytrackingapp.moredbclasses.TrackingPermissions
+//import com.example.mytrackingapp.moredbclasses.TrackingPermissions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -158,3 +159,4 @@ private val locationCallBack = object : LocationCallback() {
         }
     }
 }
+*/
