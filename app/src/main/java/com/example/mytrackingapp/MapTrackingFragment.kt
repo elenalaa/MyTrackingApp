@@ -1,25 +1,30 @@
 package com.example.mytrackingapp
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.mytrackingapp.databinding.FragmentMapTrackingBinding
+import com.example.mytrackingapp.moredbclasses.Constants.ACTION_START_OR_RESUME_SERVICE
+import com.example.mytrackingapp.moredbclasses.Functions.disable
 import com.example.mytrackingapp.moredbclasses.Functions.hide
 import com.example.mytrackingapp.moredbclasses.Functions.show
 import com.example.mytrackingapp.moredbclasses.Permissions.hasBackgroundLocationPermission
 import com.example.mytrackingapp.moredbclasses.Permissions.requestBackgroundLocationPermission
+import com.example.mytrackingapp.service.TrackingService
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.vmadalin.easypermissions.EasyPermissions
 import com.vmadalin.easypermissions.dialogs.SettingsDialog
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
 
 class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, EasyPermissions.PermissionCallbacks {
 
@@ -38,7 +43,7 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
         binding.startButton.setOnClickListener {
             onStartButtonClicked()
         }
-        binding.startButton.setOnClickListener { }
+        binding.stopButton.setOnClickListener { }
         binding.stopButton.setOnClickListener { }
 
         return binding.root
@@ -65,11 +70,25 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
 
     private fun onStartButtonClicked() {
         if(hasBackgroundLocationPermission(requireContext())) {
-            Log.d("MapTracking", "Enable")
+            binding.startButton.disable()
+            binding.startButton.hide()
+            binding.stopButton.show()
+            sentActionCommandToService(ACTION_START_OR_RESUME_SERVICE)
+
         }else{
                 requestBackgroundLocationPermission(this)
             }
         }
+    //Sent action to Service
+    private fun sentActionCommandToService(action: String){
+        Intent(
+            requireContext(),
+            TrackingService::class.java
+        ).apply {
+            this.action = action
+            requireContext().startService(this)
+        }
+    }
 
     override fun onMyLocationButtonClick(): Boolean {
         binding.hintTextView.animate().alpha(0f).duration = 1000

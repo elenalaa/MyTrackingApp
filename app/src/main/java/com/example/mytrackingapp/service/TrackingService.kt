@@ -1,92 +1,92 @@
 
-/*
+
 package com.example.mytrackingapp.service
 
-import android.annotation.SuppressLint
+//import com.example.mytrackingapp.moredbclasses.TrackingPermissions
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.NotificationManager.IMPORTANCE_LOW
 import android.content.Intent
-import android.location.Location
-import android.os.Looper
-import android.util.Log
+import android.os.Build
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import com.example.mytrackingapp.moredbclasses.Constants.ACTION_PAUSE_SERVICE
 import com.example.mytrackingapp.moredbclasses.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.example.mytrackingapp.moredbclasses.Constants.ACTION_STOP_SERVICE
-import com.example.mytrackingapp.moredbclasses.Constants.FASTEST_LOCATION_INTERVAL
-import com.example.mytrackingapp.moredbclasses.Constants.LOCATION_UPDATE_INTERVAL
-import com.example.mytrackingapp.moredbclasses.Constants.TIMER_UPDATE_INTERVAL
-//import com.example.mytrackingapp.moredbclasses.TrackingPermissions
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
-import com.google.android.gms.location.LocationResult
+import com.example.mytrackingapp.moredbclasses.Constants.NOTIFICATION_CHANNEL_ID
+import com.example.mytrackingapp.moredbclasses.Constants.NOTIFICATION_CHANNEL_NAME
 import com.google.android.gms.maps.model.LatLng
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class TrackingService : LifecycleService() {
 
-    var firstTrack = true
+    /* var firstTrack = true
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
-    private val time = MutableLiveData<Long>()
+    private val time = MutableLiveData<Long>()*/
+
+    @Inject
+    lateinit var notificationManager: NotificationManager
+    @Inject
+    lateinit var notification: NotificationCompat.Builder
+
 
     companion object {
+        val started = MutableLiveData<Boolean>()
         val time = MutableLiveData<Long>()
         val isTracking = MutableLiveData<Boolean>()
         val trackPoints = MutableLiveData<MutableList<LatLng>>()
     }
 
     private fun postInitialValues() {
+        started.postValue(false)
         isTracking.postValue(false)
         trackPoints.postValue(mutableListOf())
-
     }
 
-    @SuppressLint("VisibleForTests")
     override fun onCreate() {
-        super.onCreate()
         postInitialValues()
-        fusedLocationProviderClient = FusedLocationProviderClient(this)
+        super.onCreate()
+    }
+    /*  fusedLocationProviderClient = FusedLocationProviderClient(this)
 
         isTracking.observe(this, Observer {
             updateLocationTracking(it)
         })
-    }
+    }*/
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
             when (it.action) {
                 ACTION_START_OR_RESUME_SERVICE -> {
-                    if(firstTrack) {
-                        firstTrack = false
-                    } else{
-                        startTimer()
-                        Log.println(Log.INFO,"start", "start tracking")
-                    }
-
+                    started.postValue(true)
                 }
-                ACTION_PAUSE_SERVICE -> {
-                    pauseService()
-
+                ACTION_STOP_SERVICE -> started.postValue(false)
+                else -> {
                 }
-                ACTION_STOP_SERVICE -> {
-
-                }
-                else -> Log.println(Log.INFO,"stop", "stop tracking")
             }
         }
-        return super.onStartCommand(intent, flags, startId)
-    }
+            return super.onStartCommand(intent, flags, startId)
+        }
+
+        private fun createNotificationChannel() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val channel = NotificationChannel(
+                    NOTIFICATION_CHANNEL_ID,
+                    NOTIFICATION_CHANNEL_NAME,
+                    IMPORTANCE_LOW
+                )
+                notificationManager.createNotificationChannel(channel)
+            }
+        }
+
+}
 
 
-
-
-    private fun pauseService() {
+/*
+        private fun pauseService() {
         isTracking.postValue(false)
         timeEnable = false
     }
@@ -158,5 +158,5 @@ private val locationCallBack = object : LocationCallback() {
             }
         }
     }
-}
-*/
+}*/
+
