@@ -3,12 +3,16 @@ package com.example.mytrackingapp
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.mytrackingapp.databinding.FragmentMapTrackingBinding
+import com.example.mytrackingapp.model.Track
 import com.example.mytrackingapp.moredbclasses.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.example.mytrackingapp.moredbclasses.Constants.ACTION_STOP_SERVICE
 import com.example.mytrackingapp.moredbclasses.Functions.disable
@@ -18,9 +22,11 @@ import com.example.mytrackingapp.moredbclasses.Functions.show
 import com.example.mytrackingapp.moredbclasses.Permissions.hasBackgroundLocationPermission
 import com.example.mytrackingapp.moredbclasses.Permissions.requestBackgroundLocationPermission
 import com.example.mytrackingapp.service.TrackingService
-import com.example.mytrackingapp.service.TrackingService.Companion.startTime
-import com.example.mytrackingapp.service.TrackingService.Companion.stopTime
-import com.example.mytrackingapp.ui.viewmodels.MapSet.cameraPosition
+import com.example.mytrackingapp.ui.fragments.MapSet.calculateDistance
+import com.example.mytrackingapp.ui.fragments.MapSet.cameraPosition
+import com.example.mytrackingapp.ui.fragments.MapSet.updatedTimeForm
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -31,7 +37,7 @@ import com.vmadalin.easypermissions.dialogs.SettingsDialog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
+//@AndroidEntryPoint
 class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, EasyPermissions.PermissionCallbacks {
 
     private var _binding: FragmentMapTrackingBinding? = null
@@ -39,7 +45,13 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
 
     private lateinit var map: GoogleMap
 
-    private var locationList = mutableListOf<LatLng>()
+    private var startTime = 0L
+    private var stopTime = 0L
+
+    private var locationList= mutableListOf<LatLng>()
+    val started = MutableLiveData(false)
+
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +59,8 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentMapTrackingBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.tracking = this
 
         binding.startButton.setOnClickListener {
             onStartButtonClicked()
@@ -55,11 +69,14 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
             onStopButtonClicked()
         }
         binding.restartButton.setOnClickListener {
-
+            onRestartButtonClicked()
         }
 
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         return binding.root
     }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -82,21 +99,28 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
     }
 
     private fun observeTrackingService(){
-        TrackingService.trackPointsList.observe(viewLifecycleOwner, {
-            if (it != null)
+        TrackingService.locationList.observe(viewLifecycleOwner, {
+            if (it != null) {
                 locationList = it
-            if (locationList.size > 1) {
-                binding.stopButton.enable()
-            }
-            followUser()
+                if(locationList.size > 1){
+                    binding.stopButton.enable()
+                }
+                Log.d("LocationList", locationList.toString() )
+                followUser()
 
+            }
         })
-        startTime.observe(viewLifecycleOwner, {
-            startTime
+        TrackingService.started.observe(viewLifecycleOwner,{
+           started.value = it
         })
-        stopTime.observe(viewLifecycleOwner, {
-            stopTime
+        TrackingService.startTime.observe(viewLifecycleOwner, {
+            startTime = it
+        })
+        TrackingService.stopTime.observe(viewLifecycleOwner, {
+            stopTime = it
+            displayTrackResult()
          })
+
     }
 
     private fun followUser(){
@@ -122,6 +146,32 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
             }
         }
 
+    private fun onRestartButtonClicked() {
+        mapRestart()
+    }
+
+    //Give latest location point and moved camera in this point
+    @SuppressLint("MissingPermission")
+    private fun mapRestart() {
+        fusedLocationProviderClient.lastLocation.addOnCompleteListener{
+            val latestLocationPoint = LatLng(
+                it.result.latitude,
+                it.result.longitude
+            )
+            map.animateCamera(
+                CameraUpdateFactory.newCameraPosition(
+                    cameraPosition(latestLocationPoint)
+                )
+            )
+            locationList.clear()
+            binding.restartButton.hide()
+            binding.startButton.show()
+        }
+    }
+    /*fun onFinish(){
+        sentActionCommandToService(ACTION_STOP_SERVICE)
+    }*/
+
     private fun onStopButtonClicked() {
         stopForegroundServices()
         binding.stopButton.hide()
@@ -142,6 +192,25 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
         ).apply {
             this.action = action
             requireContext().startService(this)
+        }
+    }
+
+    private fun displayTrackResult(){
+        val result = Track(
+            calculateDistance(locationList),
+            updatedTimeForm(startTime, stopTime)
+        )
+        lifecycleScope.launch{
+            delay(2000)
+            val directions = MapTrackingFragmentDirections.actionMapTrackingFragmentToTrackFragment(result)
+            findNavController().navigate(directions)
+            binding.startButton.apply {
+                hide()
+                enable()
+            }
+            binding.stopButton.hide()
+            binding.restartButton.show()
+
         }
     }
 

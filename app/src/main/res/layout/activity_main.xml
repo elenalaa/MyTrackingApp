@@ -103,8 +103,7 @@
         </LinearLayout>
     </RelativeLayout>-->
 
-
-    <!--<com.google.android.material.bottomnavigation.BottomNavigationView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -114,7 +113,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav_menu"
 
-        />-->
+        />
 
     <fragment
         android:id="@+id/navHostFragment"

@@ -1,43 +1,63 @@
 package com.example.mytrackingapp
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.fragment.app.Fragment
+import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
+import com.example.mytrackingapp.databinding.FragmentTrackBinding
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 //import kotlinx.android.synthetic.main.fragment_track.*
 
 
 //@AndroidEntryPoint
-class TrackFragment : Fragment (R.layout.fragment_track) {
+class TrackFragment : BottomSheetDialogFragment () {
 
-    //private val viewModel: MainViewModel by viewModels()
+    private val args: TrackFragmentArgs by navArgs()
 
+    private var _binding: FragmentTrackBinding? = null
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private val binding get() = _binding!!
 
-        //val butt = getView()?.findViewById<FloatingActionButton>(R.id.button_fab)
-
-        /*butt?.setOnClickListener() {
-            (context as MainActivity).changeFragment(TrackingFragment.newInstance())
-            //findNavController().navigate(R.id.action_trackFragment_to_trackingFragment)
-        }*/
-    }
-}
-
-   /* override fun onCreateView(
+    @SuppressLint("StringFormatInvalid")
+    override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? =
-        inflater.inflate(R.layout.fragment_track, container, false)
+    ): View {
+        _binding = FragmentTrackBinding.inflate(inflater, container, false)
+        binding.distanceValueTV.text = getString(R.string._0_0km, args.trackResult.distance)
+        binding.timerValueTextView5.text = args.trackResult.time
 
-    companion object {
-        fun newInstance(): TrackFragment = TrackFragment()
+        binding.saveButton.setOnClickListener {
+            saveTrackResult()
+
     }
 
+    return binding.root
 
-    private fun requestPermissions() {
+}
+
+    private fun saveTrackResult() {
+        val saveIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT,"Track was ${args.trackResult.distance}km in ${args.trackResult.time}" )
+
+        }
+        startActivity(saveIntent)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}
+
+    /*private fun requestPermissions() {
         if(TrackingPermissions.checkLocationPermissions(requireContext())) {
             return
         }
@@ -80,7 +100,7 @@ class TrackFragment : Fragment (R.layout.fragment_track) {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
-    }
-}*/
+    }*/
+
 
 

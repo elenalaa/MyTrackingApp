@@ -1,8 +1,10 @@
+/*
 package com.example.mytrackingapp.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.mytrackingapp.model.Track
 
 
 @Database(
@@ -14,4 +16,4 @@ import androidx.room.TypeConverters
 abstract class TrackingDataBase : RoomDatabase(){
 
     abstract fun getTrackDao(): TrackDao
-}
+}*/
