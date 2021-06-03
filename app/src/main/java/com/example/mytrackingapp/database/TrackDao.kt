@@ -1,6 +1,6 @@
-package com.example.mytrackingapp.database
+//package com.example.mytrackingapp.database
 
-import androidx.room.Dao
+/*import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -14,7 +14,7 @@ interface TrackDao {
     suspend fun insertTrack(track: Track)
     //Delete Track
     @Delete
-    suspend fun deleteTrack(track: Track)
+    suspend fun deleteTrack(track: Track)*/
     //Track sorted by date
     /*@Query("SELECT * FROM tracking_table ORDER BY timestamp DESC")
     fun getAllTracksSortedByDate(): LiveData<List<Track>>
@@ -38,4 +38,4 @@ interface TrackDao {
 
     @Query("SELECT SUM(avgSpeedKMH) FROM tracking_table")
     fun getTolatAvgSpeed(): LiveData<Float>*/
-}
+//}

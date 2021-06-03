@@ -1,4 +1,4 @@
-package com.example.mytrackingapp.repository
+/*package com.example.mytrackingapp.repository
 
 import com.example.mytrackingapp.database.TrackDao
 import com.example.mytrackingapp.model.Track
@@ -11,7 +11,7 @@ class Repository @Inject constructor(
     suspend fun insertTrack(track: Track) = trackDao.insertTrack(track)
 
     suspend fun deleteTrack(track: Track) = trackDao.deleteTrack(track)
-/*
+
   fun getAllTracksSortedByDate() = trackDao.getAllTracksSortedByDate()
     fun getAllTracksSortedByTime() = trackDao.getAllTracksSortedByTime()
     fun getAllTracksSortedByAvgSpeed() = trackDao.getAllTracksSortedByAvgSpeed()
@@ -22,4 +22,3 @@ class Repository @Inject constructor(
     fun getTotalDistance() = trackDao.getTolatDistance()
     fun getTotalTime() = trackDao.getTolatTime()*/
 
-}
