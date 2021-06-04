@@ -8,17 +8,7 @@
     <dialog
         android:id="@+id/trackFragment"
         android:name="com.example.mytrackingapp.TrackFragment"
-        android:label="TrackFragment"
-        tools:layout="@layout/fragment_track">
-        <action
-            android:id="@+id/action_trackFragment_to_mapTrackingFragment"
-            app:destination="@id/mapTrackingFragment"
-            app:popUpTo="@id/mapTrackingFragment"
-            app:popUpToInclusive="true" />
-        <argument
-            android:name="trackResult"
-            app:argType="com.example.mytrackingapp.model.Track" />
-    </dialog>
+        android:label="TrackFragment"/>
     <fragment
         android:id="@+id/permissionFragment"
         android:name="com.example.mytrackingapp.PermissionFragment"
@@ -33,10 +23,9 @@
     <fragment
         android:id="@+id/mapTrackingFragment"
         android:name="com.example.mytrackingapp.MapTrackingFragment"
-        android:label="fragment_map_tracking"
-        tools:layout="@layout/fragment_map_tracking" >
-        <action
-            android:id="@+id/action_mapTrackingFragment_to_trackFragment"
-            app:destination="@id/trackFragment" />
-    </fragment>
+        android:label="fragment_map_tracking"/>
+    <fragment
+        android:id="@+id/weatherFragment"
+        android:name="com.example.mytrackingapp.ui.fragments.WeatherFragment"
+        android:label="WeatherFragment" />
 </navigation>

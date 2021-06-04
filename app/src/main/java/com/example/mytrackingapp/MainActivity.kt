@@ -5,9 +5,12 @@ package com.example.mytrackingapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.mytrackingapp.moredbclasses.Permissions.hasLocationPermission
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class MainActivity : AppCompatActivity() {
@@ -15,35 +18,50 @@ class MainActivity : AppCompatActivity() {
     val CITY: String = "helsinki,fi"
     val API: String = "ea24a5db5d70a7fa2d93a248d0fd9029"
 
-    // var selectedFragment: Fragment? = null
+    var selectedFragment: Fragment? = null
 
     private lateinit var navController: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        /*val bottomNavigation: BottomNavigationView = findViewById(R.id.bottomNavigationView)
-        bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        val bottomNavigation: BottomNavigationView = findViewById(R.id.bottomNavigationView)
+       // bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        weatherTask().execute()
-*/
         navController = findNavController(R.id.navHostFragment)
+
+        bottomNavigation.setupWithNavController(navController)
+       // NavigationUI.setupActionBarWithNavController(this, navController)
+        //weatherTask().execute()
+
 
         if (hasLocationPermission(this)) {
             navController.navigate(R.id.action_permissionFragment_to_mapTrackingFragment)
         }
 
     }
-}
 
-    /*fun changeFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction().replace(R.id.flFragment, fragment)
+    fun changeFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.navHostFragment, fragment)
             .addToBackStack(null).commit()
-    }*/
+    }
+}
 
     /*private val mOnNavigationItemSelectedListener =
         BottomNavigationView.OnNavigationItemSelectedListener() { item ->
 
             when (item.itemId) {
+
+                R.id.mapTrackingFragment -> {
+
+                    selectedFragment = MapTrackingFragment.newInstance()
+                    val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+                    transaction.replace(R.id.navHostFragment,
+                        selectedFragment as MapTrackingFragment)
+                    transaction.addToBackStack(null)
+                    transaction.commit()
+                    return@OnNavigationItemSelectedListener true
+                }
+
                 R.id.trackFragment -> {
                     selectedFragment = TrackFragment.newInstance()
                     val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
@@ -53,27 +71,22 @@ class MainActivity : AppCompatActivity() {
                     return@OnNavigationItemSelectedListener true
                 }
 
-                R.id.arFragment-> {
-                    selectedFragment = ArFragment.newInstance()
-                    val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-                    transaction.replace(R.id.navHostFragment, selectedFragment as ArFragment)
-                    transaction.addToBackStack(null)
-                    transaction.commit()
+                    *//*R.id.statisticsFragment -> {
+                    selectedFragment = < MapTrackingFragment . newInstance ()
+                    val transaction
+                    : FragmentTransaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.navHostFragment, selectedFragment as MapTrackingFragment)
+                        transaction . addToBackStack (null)
+                        transaction . commit ()
                     return@OnNavigationItemSelectedListener true
-                }
+                else ->
+                    *//*
 
-                *//*R.id.statisticsFragment -> {
-                    selectedFragment = <MapTrackingFragment.newInstance()
-                    val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-                    transaction.replace(R.id.navHostFragment, selectedFragment as MapTrackingFragment)
-                    transaction.addToBackStack(null)
-                    transaction.commit()
-                    return@OnNavigationItemSelectedListener true
-                }*//*
             }
             false
         }
-*/
+}*/
+
 
     /*inner class weatherTask() : AsyncTask<String, Void, String>() {
         override fun onPreExecute() {

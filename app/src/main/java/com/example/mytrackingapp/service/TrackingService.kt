@@ -15,6 +15,10 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import com.example.mytrackingapp.database.Track
+import com.example.mytrackingapp.database.TrackDao
+import com.example.mytrackingapp.database.TrackingDataBase
 import com.example.mytrackingapp.moredbclasses.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.example.mytrackingapp.moredbclasses.Constants.ACTION_STOP_SERVICE
 import com.example.mytrackingapp.moredbclasses.Constants.FASTEST_LOCATION_INTERVAL
@@ -27,10 +31,15 @@ import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
-class TrackingService : LifecycleService() {
+class TrackingService : LifecycleService(){
 
-
+    //var isFirstRun = true
+    //var serviceKilled = false
+    private var db: TrackingDataBase? = null
+    private var trackDao: TrackDao? = null
+    //User location
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     @Inject
@@ -80,6 +89,9 @@ class TrackingService : LifecycleService() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         super.onCreate()
 
+        started.observe(this, Observer {
+
+        })
     }
 
     //If action start or stop command -> started Foreground Service, which update location
@@ -117,6 +129,23 @@ class TrackingService : LifecycleService() {
         stopSelf()
         Log.d("Stop Foreground Service", locationList.toString())
         stopTime.postValue(System.currentTimeMillis())
+        var time = startTime.value!!.minus(startTime.value!!)
+        var distance = 10.0F
+
+        var speed = 0L
+        var track = Track(speed, distance, time)
+        Log.d("track", track.toString())
+
+/*        viewModelScope.launch {
+            db = TrackingDataBase.getTrackingDatabase(context = this)
+            trackDao = db?.getTrackDao()
+            with(trackDao) {
+                this?.insertTrack(track)
+            }
+            with(trackDao) {
+                Log.d("db", this?.getAllTracksSortedByDate().toString())
+            }
+        }*/
     }
 
     private fun removeLocationUpdates() {

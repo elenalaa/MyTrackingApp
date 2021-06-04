@@ -1,12 +1,10 @@
 package com.example.mytrackingapp
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.navArgs
 import com.example.mytrackingapp.databinding.FragmentTrackBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -16,7 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 //@AndroidEntryPoint
 class TrackFragment : BottomSheetDialogFragment () {
 
-    private val args: TrackFragmentArgs by navArgs()
+    //private val args: TrackFragmentArgs by navArgs()
 
     private var _binding: FragmentTrackBinding? = null
 
@@ -29,19 +27,22 @@ class TrackFragment : BottomSheetDialogFragment () {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTrackBinding.inflate(inflater, container, false)
-        binding.distanceValueTV.text = getString(R.string._0_0km, args.trackResult.distance)
-        binding.timerValueTextView5.text = args.trackResult.time
+        //binding.distanceValueTV.text = getString(R.string._0_0km, args.trackResult.distance)
+        //binding.timerValueTextView5.text = args.trackResult.time
 
         binding.saveButton.setOnClickListener {
-            saveTrackResult()
+            //saveTrackResult()
 
     }
 
     return binding.root
 
 }
+    companion object {
+        fun newInstance(): TrackFragment = TrackFragment()
+    }
 
-    private fun saveTrackResult() {
+    /*private fun saveTrackResult() {
         val saveIntent = Intent().apply {
             action = Intent.ACTION_SEND
             type = "text/plain"
@@ -49,7 +50,7 @@ class TrackFragment : BottomSheetDialogFragment () {
 
         }
         startActivity(saveIntent)
-    }
+    }*/
 
     override fun onDestroyView() {
         super.onDestroyView()

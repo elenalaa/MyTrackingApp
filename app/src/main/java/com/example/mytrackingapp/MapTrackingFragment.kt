@@ -10,9 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.example.mytrackingapp.databinding.FragmentMapTrackingBinding
-import com.example.mytrackingapp.model.Track
 import com.example.mytrackingapp.moredbclasses.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.example.mytrackingapp.moredbclasses.Constants.ACTION_STOP_SERVICE
 import com.example.mytrackingapp.moredbclasses.Functions.disable
@@ -22,9 +20,7 @@ import com.example.mytrackingapp.moredbclasses.Functions.show
 import com.example.mytrackingapp.moredbclasses.Permissions.hasBackgroundLocationPermission
 import com.example.mytrackingapp.moredbclasses.Permissions.requestBackgroundLocationPermission
 import com.example.mytrackingapp.service.TrackingService
-import com.example.mytrackingapp.ui.fragments.MapSet.calculateDistance
 import com.example.mytrackingapp.ui.fragments.MapSet.cameraPosition
-import com.example.mytrackingapp.ui.fragments.MapSet.updatedTimeForm
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -74,9 +70,12 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         return binding.root
+
     }
 
-
+    companion object {
+        fun newInstance(): MapTrackingFragment = newInstance()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -118,10 +117,9 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
         })
         TrackingService.stopTime.observe(viewLifecycleOwner, {
             stopTime = it
-            displayTrackResult()
+            //displayTrackResult()
          })
-
-    }
+     }
 
     private fun followUser(){
         if(locationList.isNotEmpty()){
@@ -174,6 +172,7 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
 
     private fun onStopButtonClicked() {
         stopForegroundServices()
+
         binding.stopButton.hide()
         binding.startButton.show()
     }
@@ -182,6 +181,7 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
         binding.startButton.disable()
         sentActionCommandToService(ACTION_STOP_SERVICE)
     }
+
 
 
     //Sent action to Service
@@ -195,7 +195,7 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
         }
     }
 
-    private fun displayTrackResult(){
+    /*private fun displayTrackResult(){
         val result = Track(
             calculateDistance(locationList),
             updatedTimeForm(startTime, stopTime)
@@ -212,7 +212,7 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
             binding.restartButton.show()
 
         }
-    }
+    }*/
 
     override fun onMyLocationButtonClick(): Boolean {
         binding.hintTextView.animate().alpha(0f).duration = 1000
@@ -223,6 +223,25 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
     }
     return false
 }
+
+   /* private fun endTrackAndSaveToDb() {
+        map?.snapshot { bmp ->
+            var distanceInMeters = 0
+            for(polyline in pathPoints) {
+                distanceInMeters += MapSet.calculatePolylineLength(polyline).toInt()
+            }
+            val avgSpeed = round((distanceInMeters / 1000f) / (curTimeInMillis / 1000f / 60 / 60) * 10) / 10f
+            val dateTimestamp = Calendar.getInstance().timeInMillis
+            val track = Track(dateTimestamp, avgSpeed, distanceInMeters, time)
+            viewModel.insertTrack(track)
+            Snackbar.make(
+                requireActivity().findViewById(R.id.rootView),
+                "Track saved successfully",
+                Snackbar.LENGTH_LONG
+            ).show()
+            stopTrack()
+        }
+    }*/
 
 //Permission functions
     override fun onRequestPermissionsResult(
