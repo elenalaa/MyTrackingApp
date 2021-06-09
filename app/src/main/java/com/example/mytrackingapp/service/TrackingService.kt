@@ -128,13 +128,16 @@ class TrackingService : LifecycleService(){
         stopForeground(true)
         stopSelf()
         Log.d("Stop Foreground Service", locationList.toString())
+
         stopTime.postValue(System.currentTimeMillis())
+       /*
         var time = startTime.value!!.minus(startTime.value!!)
         var distance = 10.0F
 
         var speed = 0L
-        var track = Track(speed, distance, time)
-        Log.d("track", track.toString())
+        var track = Track(timestamp, speed, distance, time)
+
+        Log.d("track", track.toString())*/
 
 /*        viewModelScope.launch {
             db = TrackingDataBase.getTrackingDatabase(context = this)

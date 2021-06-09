@@ -1,6 +1,17 @@
 package com.example.mytrackingapp.adapter
 
-/*class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>(){
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
+import com.example.mytrackingapp.R
+import com.example.mytrackingapp.database.Track
+import java.text.SimpleDateFormat
+import java.util.*
+
+class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>(){
     inner class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     val diffCallback = object : DiffUtil.ItemCallback<Track>() {
         override fun areItemsTheSame(oldItem: Track, newItem: Track): Boolean {
@@ -16,10 +27,10 @@ package com.example.mytrackingapp.adapter
 
     fun submitList(list: List<Track>) = differ.submitList(list)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RunViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder{
         return TrackViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.item_run,
+                R.layout.simple_track,
                 parent,
                 false
             )
@@ -37,17 +48,17 @@ package com.example.mytrackingapp.adapter
             val calendar = Calendar.getInstance().apply {
                 timeInMillis = run.timestamp
             }
-            val dateFormat = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
+            /*val dateFormat = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
             tvDate.text = dateFormat.format(calendar.time)
 
-            val avgSpeed = "${run.avgSpeedInKMH}km/h"
+            val avgSpeed = "${run.avgSpeed}km/h"
             tvAvgSpeed.text = avgSpeed
 
-            val distanceInKm = "${run.distanceInMeters / 1000f}km"
-            tvDistance.text = distanceInKm
+            val distance = "${run.distance / 1000f}km"
+            tvDistance.text = distance
 
-            tvTime.text = TrackingUtility.getFormattedStopWatchTime(run.timeInMillis)
+            tvTime.text = TrackingUtility.getFormattedStopWatchTime(track.timeInMillis)*/
 
         }
     }
-}*/
+}

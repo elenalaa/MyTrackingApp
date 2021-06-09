@@ -2,14 +2,21 @@ package com.example.mytrackingapp
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.example.mytrackingapp.database.Track
+import com.example.mytrackingapp.database.TrackDao
+import com.example.mytrackingapp.database.TrackingDataBase
 import com.example.mytrackingapp.databinding.FragmentMapTrackingBinding
 import com.example.mytrackingapp.moredbclasses.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.example.mytrackingapp.moredbclasses.Constants.ACTION_STOP_SERVICE
@@ -20,7 +27,9 @@ import com.example.mytrackingapp.moredbclasses.Functions.show
 import com.example.mytrackingapp.moredbclasses.Permissions.hasBackgroundLocationPermission
 import com.example.mytrackingapp.moredbclasses.Permissions.requestBackgroundLocationPermission
 import com.example.mytrackingapp.service.TrackingService
+import com.example.mytrackingapp.ui.fragments.MapSet
 import com.example.mytrackingapp.ui.fragments.MapSet.cameraPosition
+import com.example.mytrackingapp.viewmodels.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -28,26 +37,34 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.vmadalin.easypermissions.EasyPermissions
-import com.vmadalin.easypermissions.dialogs.SettingsDialog
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.lang.Math.round
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 //@AndroidEntryPoint
-class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, EasyPermissions.PermissionCallbacks {
+class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener {
 
+    private val viewModel: MainViewModel by viewModels()
     private var _binding: FragmentMapTrackingBinding? = null
     private val binding get() = _binding!!
-
+    private var db: TrackingDataBase? = null
+    private var trackDao: TrackDao? = null
     private lateinit var map: GoogleMap
 
     private var startTime = 0L
     private var stopTime = 0L
 
-    private var locationList= mutableListOf<LatLng>()
+    private var curTime = 0L
+
+    private var locationList = mutableListOf<LatLng>()
     val started = MutableLiveData(false)
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,12 +80,14 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
         }
         binding.stopButton.setOnClickListener {
             onStopButtonClicked()
+            endTrackAndSaveToDb()
         }
         binding.restartButton.setOnClickListener {
             onRestartButtonClicked()
         }
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireActivity())
         return binding.root
 
     }
@@ -81,6 +100,7 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
+        observeTrackingService()
     }
 
     @SuppressLint("MissingPermission")
@@ -97,32 +117,34 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
         observeTrackingService()
     }
 
-    private fun observeTrackingService(){
+    private fun observeTrackingService() {
         TrackingService.locationList.observe(viewLifecycleOwner, {
             if (it != null) {
                 locationList = it
-                if(locationList.size > 1){
+                if (locationList.size > 1) {
                     binding.stopButton.enable()
                 }
-                Log.d("LocationList", locationList.toString() )
+                Log.d("LocationList", locationList.toString())
                 followUser()
 
             }
         })
-        TrackingService.started.observe(viewLifecycleOwner,{
-           started.value = it
+        TrackingService.started.observe(viewLifecycleOwner, {
+            started.value = it
+            //sentActionCommandToService(ACTION_START_OR_RESUME_SERVICE)
         })
         TrackingService.startTime.observe(viewLifecycleOwner, {
             startTime = it
         })
         TrackingService.stopTime.observe(viewLifecycleOwner, {
             stopTime = it
+            //sentActionCommandToService(ACTION_STOP_SERVICE)
             //displayTrackResult()
-         })
-     }
+        })
+    }
 
-    private fun followUser(){
-        if(locationList.isNotEmpty()){
+    private fun followUser() {
+        if (locationList.isNotEmpty()) {
             map.animateCamera((
                     CameraUpdateFactory.newCameraPosition(
                         cameraPosition(
@@ -133,16 +155,16 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
     }
 
     private fun onStartButtonClicked() {
-        if(hasBackgroundLocationPermission(requireContext())) {
+        if (hasBackgroundLocationPermission(requireContext())) {
             binding.startButton.disable()
             binding.startButton.hide()
             binding.stopButton.show()
             sentActionCommandToService(ACTION_START_OR_RESUME_SERVICE)
 
-        }else{
-                requestBackgroundLocationPermission(this)
-            }
+        } else {
+            requestBackgroundLocationPermission(this)
         }
+    }
 
     private fun onRestartButtonClicked() {
         mapRestart()
@@ -151,7 +173,7 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
     //Give latest location point and moved camera in this point
     @SuppressLint("MissingPermission")
     private fun mapRestart() {
-        fusedLocationProviderClient.lastLocation.addOnCompleteListener{
+        fusedLocationProviderClient.lastLocation.addOnCompleteListener {
             val latestLocationPoint = LatLng(
                 it.result.latitude,
                 it.result.longitude
@@ -183,9 +205,8 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
     }
 
 
-
     //Sent action to Service
-    private fun sentActionCommandToService(action: String){
+    private fun sentActionCommandToService(action: String) {
         Intent(
             requireContext(),
             TrackingService::class.java
@@ -195,77 +216,61 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
         }
     }
 
-    /*private fun displayTrackResult(){
-        val result = Track(
-            calculateDistance(locationList),
-            updatedTimeForm(startTime, stopTime)
-        )
-        lifecycleScope.launch{
-            delay(2000)
-            val directions = MapTrackingFragmentDirections.actionMapTrackingFragmentToTrackFragment(result)
-            findNavController().navigate(directions)
-            binding.startButton.apply {
-                hide()
-                enable()
-            }
-            binding.stopButton.hide()
-            binding.restartButton.show()
 
-        }
-    }*/
 
     override fun onMyLocationButtonClick(): Boolean {
         binding.hintTextView.animate().alpha(0f).duration = 1000
-        lifecycleScope.launch{
+        lifecycleScope.launch {
             delay(1500)
-        binding.hintTextView.hide()
-        binding.startButton.show()
+            binding.hintTextView.hide()
+            binding.startButton.show()
+        }
+        return false
     }
-    return false
-}
 
-   /* private fun endTrackAndSaveToDb() {
-        map?.snapshot { bmp ->
-            var distanceInMeters = 0
-            for(polyline in pathPoints) {
-                distanceInMeters += MapSet.calculatePolylineLength(polyline).toInt()
+    private fun stopTrack() {
+        sentActionCommandToService(ACTION_STOP_SERVICE)
+        findNavController().navigate(R.id.action_mapTrackingFragment_to_trackFragment)
+    }
+
+
+    private fun endTrackAndSaveToDb() {
+
+        var distance = MapSet.calculateDistance(locationList)
+        /*for(location in locationList) {
+                //distance += MapSet.calculateDistance().toInt()
+            }*/
+        stopTime = System.currentTimeMillis()
+        val timestamp = Calendar.getInstance().time
+        val time = TimeUnit.MILLISECONDS.toSeconds(stopTime - startTime)
+        Log.d("track start", startTime.toString())
+        Log.d("track stop", stopTime.toString())
+        Log.d("track time", time.toString())
+        Log.d("track distance", distance.toString())
+        Log.d("track time diff", (stopTime - startTime).toString())
+        val avgSpeed = (distance / time)
+        val track = Track(timestamp.time, avgSpeed, distance.toInt(), time)
+        //viewModel.insertTrack(track)
+        Log.d("track data", Date(timestamp.time).toString())
+        Log.d("track data", track.toString())
+/*        lifecycleScope.launch {
+
+            trackDao = TrackingDataBase.getTrackingDatabase(requireContext())?.getTrackDao()
+            with(trackDao) {
+                this?.insertTrack(track)
             }
-            val avgSpeed = round((distanceInMeters / 1000f) / (curTimeInMillis / 1000f / 60 / 60) * 10) / 10f
-            val dateTimestamp = Calendar.getInstance().timeInMillis
-            val track = Track(dateTimestamp, avgSpeed, distanceInMeters, time)
-            viewModel.insertTrack(track)
-            Snackbar.make(
-                requireActivity().findViewById(R.id.rootView),
-                "Track saved successfully",
-                Snackbar.LENGTH_LONG
-            ).show()
+            with(trackDao) {
+                Log.d("db", this?.getAllTracksSortedByDate().toString())
+            }
+        }*/
+            /*    Snackbar.make(
+                requireActivity().findViewById(R.id.mapTrackingFragment),
+                "Run saved successfully",
+                LENGTH_LONG
+            ).show()*/
             stopTrack()
-        }
-    }*/
 
-//Permission functions
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        @Suppress("DEPRECATION")
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
-
-    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
-        if(EasyPermissions.somePermissionDenied(this, perms[0])){
-            SettingsDialog.Builder(requireActivity()).build().show()
-        } else{
-            requestBackgroundLocationPermission(this)
-        }
-    }
-
-    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
-        onStartButtonClicked()
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -273,3 +278,4 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
     }
 
 }
+

@@ -2,6 +2,7 @@ package com.example.mytrackingapp.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 
 
 @Entity(tableName= "tracking_table")
@@ -9,7 +10,7 @@ import androidx.room.PrimaryKey
 data class Track(
     var timestamp: Long = 0L,
     var avgSpeedKMH: Float = 0f,
-    var distance: Long = 0,
+    var distance: Int = 0,
     var time: Long = 0L
 
 ){

@@ -1,7 +1,9 @@
 package com.example.mytrackingapp.ui.fragments
 
+import android.location.Location
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Polyline
 import com.google.maps.android.SphericalUtil
 import java.text.DecimalFormat
 import java.util.concurrent.TimeUnit
@@ -25,8 +27,10 @@ object MapSet {
         return "$hours:$minutes:$seconds"
     }
 
+
+
     //Use implementation lab Util for google map
-    fun calculateDistance(locationList: MutableList<LatLng>): String {
+    fun calculateDistance(locationList: MutableList<LatLng>): Float {
 
         //Check is LocationList empty or not and if it is not, calculate distance between start
         //and stop points
@@ -34,9 +38,9 @@ object MapSet {
             val meters =
                 SphericalUtil.computeDistanceBetween(locationList.first(), locationList.last())
             val kilometers = meters / 1000
-            return DecimalFormat("#.##").format(kilometers)
+            return DecimalFormat("#.##").format(kilometers).toFloat()
         }
-        return "00.00"
+        return "00.00".toFloat()
     }
 
     fun getFormattedStopWatchTime(ms: Long, includeMillis: Boolean = false): String {
@@ -58,5 +62,7 @@ object MapSet {
                 "${if(seconds < 10) "0" else ""}$seconds:" +
                 "${if(milliseconds < 10) "0" else ""}$milliseconds"
     }
+
+
 }
 

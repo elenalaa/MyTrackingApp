@@ -5,10 +5,14 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/permissionFragment">
 
-    <dialog
+    <fragment
         android:id="@+id/trackFragment"
         android:name="com.example.mytrackingapp.TrackFragment"
-        android:label="TrackFragment"/>
+        android:label="TrackFragment">
+        <action
+            android:id="@+id/action_trackFragment_to_mapTrackingFragment"
+            app:destination="@id/mapTrackingFragment" />
+    </fragment>
     <fragment
         android:id="@+id/permissionFragment"
         android:name="com.example.mytrackingapp.PermissionFragment"
@@ -23,7 +27,11 @@
     <fragment
         android:id="@+id/mapTrackingFragment"
         android:name="com.example.mytrackingapp.MapTrackingFragment"
-        android:label="fragment_map_tracking"/>
+        android:label="fragment_map_tracking">
+        <action
+            android:id="@+id/action_mapTrackingFragment_to_trackFragment"
+            app:destination="@id/trackFragment" />
+    </fragment>
     <fragment
         android:id="@+id/weatherFragment"
         android:name="com.example.mytrackingapp.ui.fragments.WeatherFragment"
