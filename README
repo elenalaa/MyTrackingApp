@@ -1,7 +1,7 @@
 #My_Tracking_App
 
 1.The Simple Tracking app tracks the user's position and stores the track data in RoomDataBase.
-2.In progect I get Track Data, but I failed to output in RecyclerView. Also when I got the weather in Main Activity, I managed to get data without problems, 
+2.In project I get Track Data, but I failed to output in RecyclerView. Also when I got the weather in Main Activity, I managed to get data without problems, 
 but after transferring it to a separate fragment, I get the date and output it only to the console. Likewise with ARCore Fragment.
 I used google play location API, tracking events store in Room database (date, total distance, avg speed)
 UI following material and accessibility check.
