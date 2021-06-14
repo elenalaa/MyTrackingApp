@@ -9,11 +9,16 @@ import com.example.mytrackingapp.repository.Repository
 import kotlinx.coroutines.launch
 
 class MainViewModel @ViewModelInject constructor(
-//val repository: Repository
+    private val repository: Repository
 ): ViewModel() {
-    fun insertTrack(track: Track) {
 
+    //val tracksSortedByDate = repository.getAllTracksSortedByDate()
+    val tracks = MediatorLiveData<List<Track>>()
+
+    fun insertTrack(track: Track) = viewModelScope.launch{
+        repository.insertTrack(track)
     }
+
 }
     /*private val tracksSortedByDate = Repository.getAllTracksSortedByDate()
      private val tracksSortedByDistance = Repository.getAllTracksSortedByDistance()

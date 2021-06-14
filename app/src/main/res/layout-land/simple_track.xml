@@ -21,16 +21,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+
+
         android:layout_marginEnd="40dp"
         android:text="Time"
         app:layout_constraintEnd_toStartOf="@+id/distanceTV"
+        app:layout_constraintStart_toEndOf="@+id/dateTV"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/distanceTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="25dp"
+        android:layout_marginEnd="112dp"
+
         android:text="Distance"
         app:layout_constraintBaseline_toBaselineOf="@+id/avgSpeedTV"
         app:layout_constraintEnd_toStartOf="@+id/avgSpeedTV" />

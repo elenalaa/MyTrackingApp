@@ -2,18 +2,17 @@ package com.example.mytrackingapp
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
+import android.widget.Toast.LENGTH_LONG
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.mytrackingapp.adapter.TrackAdapter
 import com.example.mytrackingapp.database.Track
 import com.example.mytrackingapp.database.TrackDao
 import com.example.mytrackingapp.database.TrackingDataBase
@@ -29,7 +28,6 @@ import com.example.mytrackingapp.moredbclasses.Permissions.requestBackgroundLoca
 import com.example.mytrackingapp.service.TrackingService
 import com.example.mytrackingapp.ui.fragments.MapSet
 import com.example.mytrackingapp.ui.fragments.MapSet.cameraPosition
-import com.example.mytrackingapp.viewmodels.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -38,17 +36,17 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.lang.Math.round
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 //@AndroidEntryPoint
-class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener {
+class MapTrackingFragment : Fragment(), OnMapReadyCallback,  GoogleMap.OnMyLocationButtonClickListener {
 
-    private val viewModel: MainViewModel by viewModels()
+//  private val viewModel: MainViewModel by viewModels()
+    private lateinit var trackAdapter: TrackAdapter
+
     private var _binding: FragmentMapTrackingBinding? = null
     private val binding get() = _binding!!
     private var db: TrackingDataBase? = null
@@ -101,7 +99,14 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
         observeTrackingService()
+        //setupRecyclerView()
+
+        /*viewModel.tracksSortedByDate.observe(viewLifecycleOwner, {
+            trackAdapter.submitList(it)
+        })*/
     }
+
+
 
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap?) {
@@ -116,6 +121,7 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
         }
         observeTrackingService()
     }
+
 
     private fun observeTrackingService() {
         TrackingService.locationList.observe(viewLifecycleOwner, {
@@ -145,7 +151,7 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
 
     private fun followUser() {
         if (locationList.isNotEmpty()) {
-            map.animateCamera((
+            map?.animateCamera((
                     CameraUpdateFactory.newCameraPosition(
                         cameraPosition(
                             locationList.last()
@@ -234,6 +240,7 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
     }
 
 
+    @SuppressLint("WrongConstant")
     private fun endTrackAndSaveToDb() {
 
         var distance = MapSet.calculateDistance(locationList)
@@ -253,21 +260,22 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocati
         //viewModel.insertTrack(track)
         Log.d("track data", Date(timestamp.time).toString())
         Log.d("track data", track.toString())
-/*        lifecycleScope.launch {
+
+        /*lifecycleScope.launch {
 
             trackDao = TrackingDataBase.getTrackingDatabase(requireContext())?.getTrackDao()
             with(trackDao) {
                 this?.insertTrack(track)
-            }
-            with(trackDao) {
+            }*/
+           /* with(trackDao) {
                 Log.d("db", this?.getAllTracksSortedByDate().toString())
-            }
-        }*/
-            /*    Snackbar.make(
+            }*/
+        //}
+                Snackbar.make(
                 requireActivity().findViewById(R.id.mapTrackingFragment),
-                "Run saved successfully",
+                "Track saved successfully",
                 LENGTH_LONG
-            ).show()*/
+            ).show()
             stopTrack()
 
     }

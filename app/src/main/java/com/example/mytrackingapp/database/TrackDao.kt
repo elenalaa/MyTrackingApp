@@ -8,7 +8,7 @@ import androidx.room.*
 interface TrackDao {
     //if some problem with single track, it will be updated with new one
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTrack(track: Track)
+    suspend fun insertTrack(track: Track)
 
     //Delete Track
     @Delete

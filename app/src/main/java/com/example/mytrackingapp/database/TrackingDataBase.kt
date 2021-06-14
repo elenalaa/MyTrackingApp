@@ -20,14 +20,15 @@ abstract class TrackingDataBase : RoomDatabase(){
 
     companion object{
         var INSTANCE: TrackingDataBase? = null
-        fun getTrackingDatabase(context: Context): TrackingDataBase?{
-            if (INSTANCE==null){
-                synchronized(TrackingDataBase::class){
-                    INSTANCE = Room.databaseBuilder(context.applicationContext, TrackingDataBase::class.java, "myDb").build()
+    }
 
-                }
+    fun getTrackingDatabase(context: Context): TrackingDataBase?{
+        if (INSTANCE==null){
+            synchronized(TrackingDataBase::class){
+                INSTANCE = Room.databaseBuilder(context.applicationContext, TrackingDataBase::class.java, "myDb").build()
+
             }
-            return INSTANCE
         }
+        return INSTANCE
     }
 }
