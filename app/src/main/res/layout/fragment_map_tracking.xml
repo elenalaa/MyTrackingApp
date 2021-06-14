@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+       <variable
+            name="tracking"
+            type="com.example.mytrackingapp.MapTrackingFragment" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:context=".MapTrackingFragment" />
+
+       <TextView
+            android:id="@+id/hint_textView"
+            observeTracking="@{tracking.started}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:contentDescription="@string/press_the_button_in_left_upper_corner"
+            android:text="@string/press_on_my_location_button"
+            android:textSize="20sp"
+            android:textStyle="bold"
+           android:textColor="@color/blue_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.419"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.025" />
+
+        <Button
+            android:id="@+id/start_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/start_trackingButton"
+            android:background="@color/blue_gray"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="@string/press_start_button_for_start_tracking"/>
+
+        <Button
+            android:id="@+id/stop_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/blue_gray"
+            android:text="@string/stop_trackingButton"
+            android:contentDescription="@string/press_button_for_stop_tracking"
+            android:visibility="invisible"
+            observeTracking="@{tracking.started}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.998" />
+
+        <Button
+            android:id="@+id/restart_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:text="@string/restart_Button"
+            android:contentDescription="@string/press_restart_button_for_pause_tracking"
+            android:textColor="@color/blue_gray"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

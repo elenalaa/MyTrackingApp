@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/mapTrackingFragment"
+        android:title="@string/tracking"
+        android:contentDescription="@string/start_new_tracking"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_home_24" />
+
+    <item android:id="@+id/weatherFragment"
+        android:title="@string/weather"
+        android:contentDescription="@string/weather_menu"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_wb_sunny_24"
+        tools:ignore="HardcodedText" />
+
+    <item android:id="@+id/trackFragment"
+        android:title="@string/tracks"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_view_list_24" />
+</menu>

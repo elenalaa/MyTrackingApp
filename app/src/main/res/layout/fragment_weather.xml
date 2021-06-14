@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/weatherFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/mainContainer"
+            android:layout_width="430dp"
+            android:layout_height="693dp"
+            android:background="@color/blue_gray"
+            android:textAlignment="center"
+            android:visibility="visible"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.52"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.502">
+
+            <LinearLayout
+                android:id="@+id/addressContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/overviewContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/status"
+                    android:gravity="center"
+                    android:text="@string/_sky"
+                    android:textColor="@color/white"
+                    android:textSize="18sp">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/temperature"
+                    android:fontFamily="sans-serif-thin"
+                    android:gravity="center"
+                    android:text="@string/_c"
+                    android:textSize="50sp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/temp_min"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/minimal_temperature"
+                        android:text="@string/min_temperature_text">
+
+                    </TextView>
+
+                    <Space
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content">
+
+                    </Space>
+
+                    <TextView
+                        android:id="@+id/temp_max"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/maximal_temperature"
+                        android:text="@string/max_temperature">
+
+                    </TextView>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/wind"
+                android:layout_width="116dp"
+                android:layout_height="61dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="163dp"
+                android:layout_marginTop="556dp"
+                android:layout_marginEnd="151dp"
+                android:layout_marginBottom="76dp"
+                android:contentDescription="@string/wind"
+                android:text="@string/wind_text"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/pressure"
+                android:layout_width="wrap_content"
+                android:layout_height="54dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="162dp"
+                android:layout_marginTop="446dp"
+                android:layout_marginEnd="150dp"
+                android:layout_marginBottom="193dp"
+                android:contentDescription="@string/pressure"
+                android:text="@string/pressure_text"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/humidity"
+                android:layout_width="116dp"
+                android:layout_height="49dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="163dp"
+                android:layout_marginTop="503dp"
+                android:layout_marginEnd="151dp"
+                android:layout_marginBottom="141dp"
+                android:contentDescription="@string/humidity"
+                android:text="@string/humidity_text"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/updated_at"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/overviewContainer"
+                android:layout_marginBottom="52dp"
+                android:contentDescription="@string/updated_at"
+                android:text="@string/updated_at_text"
+                android:textAlignment="center"
+                android:textSize="14sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/overviewContainer"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="162dp"
+                android:layout_marginTop="139dp"
+                android:layout_marginEnd="153dp"
+                android:layout_marginBottom="120dp"
+                android:contentDescription="@string/address"
+                android:text="@string/location"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="24sp">
+
+            </TextView>
+
+
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/loader"
+            android:layout_width="53dp"
+            android:layout_height="78dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/mainContainer"
+            app:layout_constraintEnd_toEndOf="@+id/mainContainer">
+
+        </ProgressBar>
+
+        <TextView
+            android:id="@+id/errorText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/something_is_wrong"
+            android:textColor="@color/orange_200"
+            android:visibility="gone"
+            tools:ignore="MissingConstraints">
+
+        </TextView>
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="mainContainer" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

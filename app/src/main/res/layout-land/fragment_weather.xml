@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/weatherFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/mainContainer"
+            android:layout_width="409dp"
+            android:layout_height="223dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/addressContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/address"
+                    android:text="@string/location"
+                    android:textSize="24sp">
+
+                </TextView>
+
+
+                <TextView
+                    android:id="@+id/updated_at"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/updated_at"
+                    android:text="@string/updated_at_text"
+                    android:textSize="14sp">
+
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/overviewContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/status"
+                    android:gravity="center"
+                    android:text="@string/_sky"
+                    android:textSize="18sp">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/temperature"
+                    android:fontFamily="sans-serif-thin"
+                    android:gravity="center"
+                    android:text="@string/_c"
+                    android:textSize="50sp">
+
+                </TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/temp_min"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/minimal_temperature"
+                        android:text="@string/min_temperature_text">
+
+                    </TextView>
+
+                    <Space
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content">
+
+                    </Space>
+
+                    <TextView
+                        android:id="@+id/temp_max"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/maximal_temperature"
+                        android:text="@string/max_temperature">
+
+                    </TextView>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/wind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="174dp"
+                android:layout_marginEnd="301dp"
+                android:layout_marginBottom="30dp"
+                android:contentDescription="@string/wind"
+                android:text="@string/wind_text" />
+
+            <TextView
+                android:id="@+id/pressure"
+                android:layout_width="88dp"
+                android:layout_height="18dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="154dp"
+                android:layout_marginTop="175dp"
+                android:layout_marginEnd="167dp"
+                android:layout_marginBottom="30dp"
+                android:contentDescription="@string/pressure"
+                android:text="@string/pressure_text" />
+
+            <TextView
+                android:id="@+id/humidity"
+                android:layout_width="82dp"
+                android:layout_height="19dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="257dp"
+                android:layout_marginTop="174dp"
+                android:layout_marginEnd="70dp"
+                android:layout_marginBottom="30dp"
+                android:contentDescription="@string/humidity"
+                android:text="@string/humidity_text" />
+
+
+        </RelativeLayout>
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="mainContainer"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="20dp" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
