@@ -6,6 +6,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.mytrackingapp.service.TrackingService
 
 
 @Database(
@@ -19,6 +20,10 @@ abstract class TrackingDataBase : RoomDatabase(){
     abstract fun getTrackDao(): TrackDao
 
     companion object{
+        fun getTrackingDatabase(context: TrackingService) {
+
+        }
+
         var INSTANCE: TrackingDataBase? = null
     }
 

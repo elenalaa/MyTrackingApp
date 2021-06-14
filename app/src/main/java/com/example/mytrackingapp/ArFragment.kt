@@ -1,10 +1,14 @@
 package com.example.mytrackingapp
 
+import android.media.Image
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.ar.core.HitResult
 
 class ArFragment : Fragment() {
     private val TAG = "EEE"
@@ -28,21 +32,25 @@ class ArFragment : Fragment() {
 
         ar = childFragmentManager.findFragmentById(R.id.ux_fragment) as ArFragment?
 
-        /*ar.setOnTapArPlaneListener { hitResult: HitResult, plane: Image.Plane, motionEvent: MotionEvent ->
+        ar.setOnTapArPlaneListener { hitResult: HitResult, plane: Image.Plane, motionEvent: MotionEvent ->
             val trackable = hitResult.trackable
             Log.d(TAG, "HIIIT  ${hitResult.trackable}")
             if (trackable is Image.Plane) {
                 val anchor = hitResult.createAnchor()
 
-                placeObject(ar!!, anchor, Uri.parse("file:///android_asset/kanto.gltf"))
+                //placeObject(ar!!, anchor, Uri.parse("file:///android_asset/kanto.gltf"))
             }
         }
 
     }
-}*/
-
-    }
 }
+
+private fun ArFragment?.setOnTapArPlaneListener(function: (HitResult, Image.Plane, MotionEvent) -> Unit) {
+
+}
+
+
+
 
 
 

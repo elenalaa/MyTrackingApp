@@ -1,45 +1,78 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.mytrackingapp.ui.fragments
 
 import android.annotation.SuppressLint
 import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.mytrackingapp.R
 import com.example.mytrackingapp.databinding.FragmentWeatherBinding
+import org.jetbrains.annotations.Nullable
 import org.json.JSONObject
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class WeatherFragment : Fragment() {
+//@Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE")
+class WeatherFragment : Fragment(R.layout.fragment_weather) {
 
     val CITY: String = "helsinki,fi"
     val API: String = "ea24a5db5d70a7fa2d93a248d0fd9029"
 
     private var _binding: FragmentWeatherBinding? = null
+    private var loader: ProgressBar? = null
+    private var relativeLayout: RelativeLayout? = null
+    private var errorText: TextView? = null
 
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
-    @SuppressLint("StringFormatInvalid")
+    //@SuppressLint("StringFormatInvalid")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentWeatherBinding.inflate(inflater, container, false)
-        //binding.distanceValueTV.text = getString(R.string._0_0km, args.trackResult.distance)
-        //binding.timerValueTextView5.text = args.trackResult.time
-
         weatherTask().execute()
         return binding.root
 
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.address.text.toString()
+        binding.updatedAt.toString()
+        binding.description.toString()
+        binding.temp.toString()
+        binding.tempMin.toString()
+        binding.tempMax.toString()
+        binding.wind.toString()
+        binding.pressure.toString()
+        binding.humidity.toString()
+
+       // loader!!.visibility = View.GONE
+       // errorText!!.visibility = View.VISIBLE
+
+        loader = binding.loader
+        relativeLayout = binding.mainContainer
+        //relativeLayout!!.visibility = View.GONE
+        errorText = binding.errorText
+        //errorText?.visibility = View.GONE
+    }
+
     companion object {
         fun newInstance(): WeatherFragment = WeatherFragment()
+
     }
 
     override fun onDestroyView() {
@@ -47,6 +80,8 @@ class WeatherFragment : Fragment() {
         _binding = null
     }
 
+@javax.annotation.Nullable
+@SuppressLint("StaticFieldLeak")
 inner class weatherTask() : AsyncTask<String, Void, String>() {
     override fun onPreExecute() {
         super.onPreExecute()
@@ -54,59 +89,63 @@ inner class weatherTask() : AsyncTask<String, Void, String>() {
     }
 
     override fun doInBackground(vararg p0: String?): String? {
-        var response: String?
-        response = try {
+
+        val response: String? = try {
             URL("https://api.openweathermap.org/data/2.5/weather?q=$CITY&units=metric&appid=$API")
                 .readText(Charsets.UTF_8)
-        } catch (e: Exception) {
+
+        }
+        catch (e: Exception) {
             null
         }
+        Log.d("response", response.toString())
         return response
-
     }
-
-
-    override fun onPostExecute(result: String?) {
+    @Nullable
+    @Suppress("ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE")
+    override fun onPostExecute(result: String) {
         super.onPostExecute(result)
         try {
             val jsonObj = JSONObject(result)
             val main = jsonObj.getJSONObject("main")
             val sys = jsonObj.getJSONObject("sys")
-            val wind = jsonObj.getJSONObject("wind")
+            var wind = jsonObj.getJSONObject("wind")
             val weather = jsonObj.getJSONArray("weather").getJSONObject(0)
             val updatedAt: Long = jsonObj.getLong("dt")
-            val updatedAtText =
+            var updatedAtText =
                 "Updated at: " + SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.ENGLISH).format(
                     Date(updatedAt * 1000))
-            val temp = main.getString("temp") + "C"
-            val tempMin = "Min Temp: " + main.getString("temp_min") + "C"
-            val tempMax = "Max Temp: " + main.getString("temp_max") + "C"
-            val pressure = main.getString("pressure")
-            val humidity = main.getString("humidity")
-            val sunrise: Long = sys.getLong("sunrise")
-            val sunset: Long = sys.getLong("sunset")
-            val windSpeed = wind.getString("speed")
+            var temp = main.getString("temp") + "C"
+            Log.d("temp", temp)
+            var tempMin = "Min Temp: " + main.getString("temp_min") + "C"
+            Log.d("tempMin", tempMin)
+            var tempMax = "Max Temp: " + main.getString("temp_max") + "C"
+            Log.d("tempMax", tempMax)
+            var pressure = main.getString("pressure")
+            var humidity = main.getString("humidity")
+            var windSpeed = wind.getString("speed")
             val weatherDescription = weather.getString("description")
-            val address = jsonObj.getString("name") + ", " + sys.getString("country")
+            var address = jsonObj.getString("name") + ", " + sys.getString("country")
 
-            //findViewById<TextView>(R.id.address).text = address
-            //findViewById<TextView>(R.id.updated_at).text = updatedAtText
-            //findViewById<TextView>(R.id.status).text = weatherDescription.capitalize()
-            //findViewById<TextView>(R.id.temp).text = temp
-            //findViewById<TextView>(R.id.temp_min).text = tempMin
-            //findViewById<TextView>(R.id.temp_max).text = tempMax
-            //findViewById<TextView>(R.id.sunrise).text = SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(sunrise*1000))
-            //findViewById<TextView>(R.id.sunset).text = SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(sunset*1000))
-            //findViewById<TextView>(R.id.wind).text = windSpeed
-            //findViewById<TextView>(R.id.pressure).text = pressure
-            //findViewById<TextView>(R.id.humidity).text = humidity
+            address = binding.address.text.toString()
+            updatedAtText = binding.updatedAt.toString()
+            //description = binding.description?.text.toString()
+            temp = binding.temp.text.toString()
+            Log.d("temp", temp)
+            tempMin = binding.tempMin.text.toString()
+            Log.d("tempMin", tempMin)
+            tempMax = binding.tempMax.text.toString()
+            Log.d("tempMax", tempMax)
+            //wind = windSpeed.toString()
+            //pressure = (view)?.findViewById<TextView>(R.id.pressure)?.text.toString()
+            //humidity = (view)?.findViewById<TextView>(R.id.humidity)?.text.toString()
 
+            loader!!.visibility = View.GONE
+            errorText!!.visibility = View.VISIBLE
 
-            //findViewById<ProgressBar>(R.id.loader).visibility = View.GONE
-            //findViewById<RelativeLayout>(R.id.mainContainer).visibility = View.VISIBLE
         } catch (e: Exception) {
-            //findViewById<ProgressBar>(R.id.loader).visibility = View.GONE
-            //findViewById<TextView>(R.id.errorText).visibility = View.VISIBLE
+            loader!!.visibility = View.GONE
+            errorText!!.visibility = View.VISIBLE
         }
     }
 }

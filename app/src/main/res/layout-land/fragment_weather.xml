@@ -11,18 +11,14 @@
 
         <RelativeLayout
             android:id="@+id/mainContainer"
-            android:layout_width="430dp"
-            android:layout_height="693dp"
-            android:background="@color/blue_gray"
-            android:textAlignment="center"
+            android:layout_width="409dp"
+            android:layout_height="223dp"
             android:visibility="visible"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.52"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.502">
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:id="@+id/addressContainer"
@@ -31,6 +27,26 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/address"
+                    android:text="@string/location"
+                    android:textSize="24sp">
+
+                </TextView>
+
+
+                <TextView
+                    android:id="@+id/updated_at"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/updated_at"
+                    android:text="@string/updated_at_text"
+                    android:textSize="14sp">
+
+                </TextView>
             </LinearLayout>
 
             <LinearLayout
@@ -41,13 +57,12 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/description"
+                    android:id="@+id/status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/status"
                     android:gravity="center"
                     android:text="@string/_sky"
-                    android:textColor="@color/white"
                     android:textSize="18sp">
 
                 </TextView>
@@ -61,8 +76,7 @@
                     android:fontFamily="sans-serif-thin"
                     android:gravity="center"
                     android:text="@string/_c"
-                    android:textSize="50sp"
-                    android:textStyle="bold">
+                    android:textSize="50sp">
 
                 </TextView>
 
@@ -101,116 +115,66 @@
 
             <TextView
                 android:id="@+id/wind"
-                android:layout_width="116dp"
-                android:layout_height="61dp"
-                android:layout_alignParentStart="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="163dp"
-                android:layout_marginTop="556dp"
-                android:layout_marginEnd="151dp"
-                android:layout_marginBottom="76dp"
+                android:layout_marginTop="174dp"
+                android:layout_marginEnd="301dp"
+                android:layout_marginBottom="30dp"
                 android:contentDescription="@string/wind"
-                android:text="@string/wind_text"
-                android:textAlignment="center" />
+                android:text="@string/wind_text" />
 
             <TextView
                 android:id="@+id/pressure"
-                android:layout_width="wrap_content"
-                android:layout_height="54dp"
+                android:layout_width="88dp"
+                android:layout_height="18dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="162dp"
-                android:layout_marginTop="446dp"
-                android:layout_marginEnd="150dp"
-                android:layout_marginBottom="193dp"
+                android:layout_marginStart="154dp"
+                android:layout_marginTop="175dp"
+                android:layout_marginEnd="167dp"
+                android:layout_marginBottom="30dp"
                 android:contentDescription="@string/pressure"
-                android:text="@string/pressure_text"
-                android:textAlignment="center" />
+                android:text="@string/pressure_text" />
 
             <TextView
                 android:id="@+id/humidity"
-                android:layout_width="116dp"
-                android:layout_height="49dp"
+                android:layout_width="82dp"
+                android:layout_height="19dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="163dp"
-                android:layout_marginTop="503dp"
-                android:layout_marginEnd="151dp"
-                android:layout_marginBottom="141dp"
+                android:layout_marginStart="257dp"
+                android:layout_marginTop="174dp"
+                android:layout_marginEnd="70dp"
+                android:layout_marginBottom="30dp"
                 android:contentDescription="@string/humidity"
-                android:text="@string/humidity_text"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/updated_at"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/overviewContainer"
-                android:layout_marginBottom="52dp"
-                android:contentDescription="@string/updated_at"
-                android:text="@string/updated_at_text"
-                android:textAlignment="center"
-                android:textSize="14sp">
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/overviewContainer"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="162dp"
-                android:layout_marginTop="139dp"
-                android:layout_marginEnd="153dp"
-                android:layout_marginBottom="120dp"
-                android:contentDescription="@string/address"
-                android:text="@string/location"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="24sp">
-
-            </TextView>
+                android:text="@string/humidity_text" />
 
 
         </RelativeLayout>
-
-        <ProgressBar
-            android:id="@+id/loader"
-            android:layout_width="53dp"
-            android:layout_height="78dp"
-            android:layout_centerInParent="true"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/mainContainer"
-            app:layout_constraintEnd_toEndOf="@+id/mainContainer">
-
-        </ProgressBar>
-
-        <TextView
-            android:id="@+id/errorText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/something_is_wrong"
-            android:textColor="@color/orange_200"
-            android:visibility="gone"
-            tools:ignore="MissingConstraints">
-
-        </TextView>
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="mainContainer" />
+            app:constraint_referenced_ids="mainContainer"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="20dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -89,8 +89,6 @@ class TrackAdapter : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>(){
             val distance = "${track.distance / 1000f}km"
             distanceTV.text = distance
 
-           // tvTime.text = TrackingUtility.getFormattedStopWatchTime(track.timeInMillis)*/
-
         }
     }
 }

@@ -12,9 +12,8 @@ class MainViewModel @ViewModelInject constructor(
     private val repository: Repository
 ): ViewModel() {
 
-    //val tracksSortedByDate = repository.getAllTracksSortedByDate()
+    val tracksSortedByDate = repository.getAllTracksSortedByDate()
     val tracks = MediatorLiveData<List<Track>>()
-
     fun insertTrack(track: Track) = viewModelScope.launch{
         repository.insertTrack(track)
     }
@@ -25,7 +24,7 @@ class MainViewModel @ViewModelInject constructor(
      private val tracksSortedByTime = Repository.getAllTracksSortedByTime()
      private val tracksSortedByAvgSpeed = Repository.getAllTracksSortedByAvgSpeed()
 
-     val tracks = MediatorLiveData<List<Track>>()
+
      var sortType = SortType.DATE
 
      init {
@@ -49,8 +48,4 @@ class MainViewModel @ViewModelInject constructor(
          repository.insertTrack(track)
      }
 
-     */
-
-
-
-
+   */

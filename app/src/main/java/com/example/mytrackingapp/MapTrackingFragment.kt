@@ -100,10 +100,9 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback,  GoogleMap.OnMyLocat
         mapFragment?.getMapAsync(this)
         observeTrackingService()
         //setupRecyclerView()
-
-        /*viewModel.tracksSortedByDate.observe(viewLifecycleOwner, {
-            trackAdapter.submitList(it)
-        })*/
+        //viewModel.tracksSortedByDate.observe(viewLifecycleOwner, {
+          //  trackAdapter.submitList(it)
+       // })
     }
 
 
@@ -144,14 +143,14 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback,  GoogleMap.OnMyLocat
         })
         TrackingService.stopTime.observe(viewLifecycleOwner, {
             stopTime = it
-            //sentActionCommandToService(ACTION_STOP_SERVICE)
+            sentActionCommandToService(ACTION_STOP_SERVICE)
             //displayTrackResult()
         })
     }
 
     private fun followUser() {
         if (locationList.isNotEmpty()) {
-            map?.animateCamera((
+            map.animateCamera((
                     CameraUpdateFactory.newCameraPosition(
                         cameraPosition(
                             locationList.last()
@@ -194,9 +193,6 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback,  GoogleMap.OnMyLocat
             binding.startButton.show()
         }
     }
-    /*fun onFinish(){
-        sentActionCommandToService(ACTION_STOP_SERVICE)
-    }*/
 
     private fun onStopButtonClicked() {
         stopForegroundServices()
@@ -219,6 +215,7 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback,  GoogleMap.OnMyLocat
         ).apply {
             this.action = action
             requireContext().startService(this)
+
         }
     }
 
@@ -244,9 +241,7 @@ class MapTrackingFragment : Fragment(), OnMapReadyCallback,  GoogleMap.OnMyLocat
     private fun endTrackAndSaveToDb() {
 
         var distance = MapSet.calculateDistance(locationList)
-        /*for(location in locationList) {
-                //distance += MapSet.calculateDistance().toInt()
-            }*/
+
         stopTime = System.currentTimeMillis()
         val timestamp = Calendar.getInstance().time
         val time = TimeUnit.MILLISECONDS.toSeconds(stopTime - startTime)

@@ -13,8 +13,6 @@ object Constants {
     const val LOCATION_UPDATE_INTERVAL = 10000L
     const val FASTEST_LOCATION_INTERVAL = 4000L
 
-    const val TIMER_UPDATE_INTERVAL = 50L
-
     const val PERMISSION_LOCATION_REQUEST_CODE = 1
     const val PERMISSION_BACKGROUND_LOCATION_REQUEST_CODE = 2
     const val NOTIFICATION_CHANNEL_ID = "tracker_notification_id"

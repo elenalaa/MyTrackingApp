@@ -35,7 +35,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class TrackingService : LifecycleService(){
 
-    //var isFirstRun = true
+    //var isFirstTrack = true
     //var serviceKilled = false
     private var db: TrackingDataBase? = null
     private var trackDao: TrackDao? = null
@@ -66,7 +66,7 @@ class TrackingService : LifecycleService(){
     private val locationCallBack = object : LocationCallback() {
         override fun onLocationResult(result: LocationResult) {
             super.onLocationResult(result)
-            result?.locations.let { locations ->
+            result.locations.let { locations ->
                 for (location in locations) {
                     updateLocationList(location)
 
@@ -130,24 +130,24 @@ class TrackingService : LifecycleService(){
         Log.d("Stop Foreground Service", locationList.toString())
 
         stopTime.postValue(System.currentTimeMillis())
-       /*
+
         var time = startTime.value!!.minus(startTime.value!!)
         var distance = 10.0F
 
         var speed = 0L
-        var track = Track(timestamp, speed, distance, time)
 
-        Log.d("track", track.toString())*/
+        var timestamp = 0L
+        var track = Track(timestamp, speed.toFloat(), distance.toInt(), time)
 
-/*        viewModelScope.launch {
+        Log.d("track", track.toString())
+
+   /*viewModelScope.launch {
             db = TrackingDataBase.getTrackingDatabase(context = this)
             trackDao = db?.getTrackDao()
             with(trackDao) {
                 this?.insertTrack(track)
             }
-            with(trackDao) {
-                Log.d("db", this?.getAllTracksSortedByDate().toString())
-            }
+
         }*/
     }
 

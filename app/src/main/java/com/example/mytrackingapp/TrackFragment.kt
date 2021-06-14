@@ -33,9 +33,7 @@ class TrackFragment : Fragment(R.layout.fragment_track) {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTrackBinding.inflate(inflater, container, false)
-
-
-       // setupRecyclerView()
+        setupRecyclerView()
 
         /*viewModel.tracks.observe(viewLifecycleOwner, Observer {
             trackAdapter.submitList(it)
@@ -51,9 +49,9 @@ class TrackFragment : Fragment(R.layout.fragment_track) {
    companion object {
         fun newInstance(): TrackFragment = TrackFragment()
 
-        //private val args: TrackFragmentArgs by navArgs()
+
         //private val viewModel: MainViewModel by viewModels()
-       // private lateinit var trackAdapter: TrackAdapter
+        //private val trackAdapter: TrackAdapter
     }
 
    private fun setupRecyclerView() = rvTracks?.apply {

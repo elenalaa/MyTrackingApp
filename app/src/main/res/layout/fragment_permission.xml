@@ -10,6 +10,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
+        android:backgroundTint="@color/gray_200"
+        android:fadeScrollbars="true"
         tools:context=".PermissionFragment">
 
         <TextView
@@ -20,8 +23,9 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="48dp"
-            android:textAlignment="center"
             android:text="@string/permission_text"
+            android:textAlignment="center"
+            android:textColor="@color/brown"
             app:layout_constraintBottom_toTopOf="@+id/buttonPermissions"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,9 +40,9 @@
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="32dp"
             android:text="@string/next_press"
-            android:textColor="@color/black"
-            android:textSize="16sp"
             android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -49,10 +53,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/start_with_tracking_app"
-            app:layout_constraintBottom_toTopOf="@+id/permissions_textView"
+            android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="@color/colorPrimary"
+            app:layout_constraintBottom_toTopOf="@+id/permissions_textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

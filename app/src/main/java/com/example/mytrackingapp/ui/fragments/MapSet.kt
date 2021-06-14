@@ -1,9 +1,7 @@
 package com.example.mytrackingapp.ui.fragments
 
-import android.location.Location
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Polyline
 import com.google.maps.android.SphericalUtil
 import java.text.DecimalFormat
 import java.util.concurrent.TimeUnit
@@ -62,7 +60,6 @@ object MapSet {
                 "${if(seconds < 10) "0" else ""}$seconds:" +
                 "${if(milliseconds < 10) "0" else ""}$milliseconds"
     }
-
 
 }
 
