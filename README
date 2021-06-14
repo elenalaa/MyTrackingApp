@@ -1,12 +1,14 @@
+#My_Tracking_App
 
-android.Location or google play location API
-tracking events store in Room database ( date, total distance, avg speed and 
-related table for gps points: timestamp,
-lat/long/altitude, speed)
-UI following material and accessibility check
-references of used for making the project:
-https://developer.android.com/reference/android/arch/persistence/room/RoomDatabase,
-https://developers.google.com/maps/documentation,
-https://stackoverflow.com/questions/55909804/duplicate-class-android-support-v4-app-inotificationsidechannel-found-in-modules
-https://stackoverflow.com/questions/16580586/add-support-library-to-android-studio-project/67763783#67763783
-tutorials
+1.The Simple Tracking app tracks the user's position and stores the track data in RoomDataBase.
+2.In progect I get Track Data, but I failed to output in RecyclerView. Also when I got the weather in Main Activity, I managed to get data without problems, 
+but after transferring it to a separate fragment, I get the date and output it only to the console. Likewise with ARCore Fragment.
+I used google play location API, tracking events store in Room database (date, total distance, avg speed)
+UI following material and accessibility check.
+
+3.References of used for making the project:
+android developer links(https://developer.android.com/reference/android/arch/persistence/room/RoomDatabase,
+https://developers.google.com/maps/documentation),
+stackoverflow(https://stackoverflow.com/questions/55909804/duplicate-class-android-support-v4-app-inotificationsidechannel-found-in-modules
+https://stackoverflow.com/questions/16580586/add-support-library-to-android-studio-project/67763783#67763783, https://stackoverflow.com/tags/android-studio/new)
+tutorials(https://www.youtube.com/watch?v=Rd5dLmKewqg, https://www.youtube.com/watch?v=m_H3JuybsJ0, https://www.youtube.com/watch?v=-vAI7RSPxOA
